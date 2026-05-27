@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.3.1';
+  var APP_VERSION = '1.3.2';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -1308,7 +1308,8 @@
     var headers = {};
     if (token) headers.Authorization = 'Bearer ' + token;
 
-    fetch(GH_PROXY_URL + '?raw=1', {
+    // Default GET (bez ?raw=1) — Worker atgriež izparsētu JSON
+    fetch(GH_PROXY_URL, {
       headers: headers,
       cache: 'no-cache'
     })
@@ -1317,18 +1318,13 @@
       return r.json();
     })
     .then(function(ghResponse) {
-      console.log('Pull response keys:', Object.keys(ghResponse));
-      if (!ghResponse.content) {
-        console.error('Pull: no content in response', ghResponse);
-        throw new Error('Nav datu GitHub (content tukš). Pārbaudi tokenu Settings.');
-      }
-      var decoded = atob(ghResponse.content);
-      var remoteData = JSON.parse(decoded);
-      if (!remoteData.tabs) throw new Error('Nederīgs formāts');
+      // Default handler returns { sha, content } where content is parsed JSON directly
+      var remoteData = ghResponse.content || ghResponse;
+      if (!remoteData || !remoteData.tabs) throw new Error('Nederīgs formāts no GitHub');
 
       // Overwrite localStorage ar GitHub versiju
       localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
-      callback({icon:'✅',msg:'Atjaunots no GitHub ⬇️',reload:true});
+      callback({icon:'✅',msg:'Atjaunots no GitHub ⬇️ (' + remoteData.tabs.length + ' tabi)',reload:true});
     })
     .catch(function(e) {
       callback({icon:'❌',msg:'Pull neizdevās: ' + (e.message || '?')});
