@@ -3,7 +3,12 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.2.5';
+  var APP_VERSION = '1.3.0';
+  var BUILD_ENV = (function() {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
+    if (location.hostname.includes('tail')) return '🧪 beta';
+    return '🚀 production';
+  })();
   var BUILD_HASH = 'dev'; // auto-updated on deploy
   var TOKEN_KEY = 'kontekstalogas-gh-token';
   var DELETED_KEY = 'kontekstalogas-deleted';
@@ -1312,7 +1317,11 @@
       return r.json();
     })
     .then(function(ghResponse) {
-      if (!ghResponse.content) throw new Error('Nav datu GitHub');
+      console.log('Pull response keys:', Object.keys(ghResponse));
+      if (!ghResponse.content) {
+        console.error('Pull: no content in response', ghResponse);
+        throw new Error('Nav datu GitHub (content tukš). Pārbaudi tokenu Settings.');
+      }
       var decoded = atob(ghResponse.content);
       var remoteData = JSON.parse(decoded);
       if (!remoteData.tabs) throw new Error('Nederīgs formāts');
@@ -2179,7 +2188,7 @@
 
     // Version display
     var vf = document.getElementById('versionFooter');
-    if (vf) vf.textContent = 'Konteksta logs v' + APP_VERSION + ' — lokāli, tavi dati, tava kontrole';
+    if (vf) vf.textContent = 'Konteksta logs v' + APP_VERSION + ' ' + BUILD_ENV;
   }
 
   /* ─── Export ───────────────────────────────────────────────────── */
