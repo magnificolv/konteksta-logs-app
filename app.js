@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.3.2';
+  var APP_VERSION = '1.3.3';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -1308,8 +1308,9 @@
     var headers = {};
     if (token) headers.Authorization = 'Bearer ' + token;
 
-    // Default GET (bez ?raw=1) — Worker atgriež izparsētu JSON
-    fetch(GH_PROXY_URL, {
+    // DL: raw data.json caur Worker — GitHub Accept: application/vnd.github.raw
+    // Worker neapstrādā, tikai izlaiž cauri → 0 CPU time, nekad netaimo
+    fetch(GH_PROXY_URL + '?dl=1', {
       headers: headers,
       cache: 'no-cache'
     })
@@ -1585,21 +1586,10 @@
     if (settingsUpdateBtn) {
       settingsUpdateBtn.addEventListener('click', function() {
         hideModal('settingsModal');
-        if (confirm('Atjaunināt aplikāciju uz jaunāko versiju?\\n\\nTiks notīrīts kešs un pārlādēta lapa. Dati localStorage saglabāsies.')) {
-          // Notīra visus SW kešus
-          if ('caches' in window) {
-            caches.keys().then(function(names) {
-              names.forEach(function(name) { caches.delete(name); });
-            });
-          }
-          // Noņem Service Worker
-          if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(regs) {
-              regs.forEach(function(reg) { reg.unregister(); });
-            });
-          }
-          // Pārlādē
-          setTimeout(function() { location.reload(true); }, 500);
+        if (confirm('Atjaunināt aplikāciju uz jaunāko versiju?\\n\\nKešs tiks notīrīts un lapa pārlādēta.')) {
+          settingsUpdateBtn.textContent = '⏳ Atjaunina...';
+          settingsUpdateBtn.disabled = true;
+          _forceUpdate();
         }
       });
     }
@@ -2216,20 +2206,47 @@
       .then(function(remoteVer) {
         remoteVer = remoteVer.trim();
         if (remoteVer && remoteVer !== APP_VERSION) {
-          if (vf) vf.textContent = 'Konteksta logs v' + APP_VERSION + ' ' + BUILD_ENV + '  ⚡ v' + remoteVer + ' pieejama!';
-          vf.style.color = '#f59e0b';
-          vf.style.cursor = 'pointer';
-          vf.title = 'Spied lai atjauninātu uz v' + remoteVer;
-          vf.onclick = function() {
-            if (confirm('Atjaunināt uz v' + remoteVer + '?')) {
-              caches.keys().then(function(names) { names.forEach(function(n) { caches.delete(n); }); });
-              navigator.serviceWorker.getRegistrations().then(function(regs) { regs.forEach(function(r) { r.unregister(); }); });
-              setTimeout(function() { location.reload(true); }, 300);
-            }
-          };
+          if (vf) {
+            vf.textContent = 'Konteksta logs v' + APP_VERSION + ' ' + BUILD_ENV + '  ⚡ v' + remoteVer + ' — spied lai atjauninātu!';
+            vf.style.color = '#f59e0b';
+            vf.style.cursor = 'pointer';
+            vf.title = 'Spied lai atjauninātu uz v' + remoteVer;
+            vf.onclick = function() {
+              vf.textContent = '⏳ Atjaunina...';
+              vf.style.color = '#f59e0b';
+              _forceUpdate();
+            };
+          }
         }
       })
-      .catch(function() { /* klusām — nav kritiski */ });
+      .catch(function() { /* klusām */ });
+  }
+
+  // Force update: clear all caches + unregister SW + hard reload
+  function _forceUpdate() {
+    var done = 0;
+    function reload() {
+      done++;
+      if (done >= 2) {
+        // Hard reload — bypass browser cache
+        var url = location.href.split('#')[0];
+        if (url.indexOf('?') === -1) url += '?v=' + Date.now();
+        else url += '&v=' + Date.now();
+        location.replace(url);
+      }
+    }
+    // Clear SW caches
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        Promise.all(names.map(function(n) { return caches.delete(n); })).then(reload);
+      }).catch(reload);
+    } else { reload(); }
+    // Unregister Service Workers
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        Promise.all(regs.map(function(r) { return r.unregister(); })).then(reload);
+      }).catch(reload);
+    } else { reload(); }
   }
 
   /* ─── Export ───────────────────────────────────────────────────── */
