@@ -1447,6 +1447,31 @@ body::before {
    Responsive
    --------------------------------------------------------------------------- */
 
+@media (max-width: 768px) {
+    /* Performance: disable expensive effects on mobile */
+    body::before { display: none; }
+
+    .tab-card,
+    .expanded-panel,
+    .modal,
+    .add-tab-btn {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .tab-card::before { display: none; }
+
+    .tab-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .tab-card { background: rgba(22, 22, 44, 0.85); }
+    .expanded-panel { background: rgba(18, 18, 36, 0.9); }
+    .modal { background: rgba(18, 18, 36, 0.95); }
+    .add-tab-btn { background: rgba(22, 22, 44, 0.7); }
+}
+
 @media (max-width: 600px) {
     .app-container { padding: 16px 14px 50px; }
     .title { font-size: 1.5rem; }
