@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪟 Konteksta logs</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#09090f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Konteksta logs">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Loading / Opening Animation -->
+        <div class="window-loader" id="windowLoader">
+            <div class="window-frame">
+                <div class="window-titlebar">
+                    <div class="window-dots">
+                        <span class="dot-red"></span>
+                        <span class="dot-yellow"></span>
+                        <span class="dot-green"></span>
+                    </div>
+                    <span class="window-label">konteksta logs</span>
+                </div>
+                <div class="window-body">
+                    <div class="window-spinner"></div>
+                    <p>Atveras...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="title-group">
+                <span class="title-icon">🪟</span>
+                <h1 class="title">Konteksta<span class="title-accent">logs</span></h1>
+            </div>
+            <p class="subtitle">Tavas dzīves logi — vienā mirklī. Atver, atceries, rīkojies.</p>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text"
+                       id="searchInput"
+                       class="search-input"
+                       placeholder="🔍 Meklēt visos konteksta logos..."
+                       autocomplete="off">
+                <div class="search-results" id="searchResults" style="display:none"></div>
+            </div>
+        </header>
+
+        <!-- Tab Management -->
+        <div class="tab-actions">
+            <button class="add-tab-btn" id="addTabBtn">➕ Jauns tabs</button>
+            <button class="add-tab-btn" id="pushBtn" title="Push — saglabāt telefona datus GitHub">☁️ Push</button>
+            <button class="add-tab-btn settings-btn" id="settingsBtn" title="Iestatījumi">⚙️</button>
+        </div>
+
+        <!-- Tab Grid -->
+        <main class="tab-grid" id="tabGrid">
+            <!-- Dinamiski aizpildās no IndexedDB -->
+        </main>
+
+        <!-- Expanded Panel -->
+        <div class="expanded-panel" id="expandedPanel">
+            <div class="expanded-header">
+                <button class="back-btn" id="backBtn">← Atpakaļ</button>
+                <h2 class="expanded-title" id="expandedTitle"></h2>
+                <span class="expanded-updated" id="expandedUpdated"></span>
+                <div class="expanded-actions">
+                    <button class="edit-tab-btn" id="editContentBtn" title="Rediģēt saturu">✏️</button>
+                    <button class="edit-tab-btn" id="editTabBtn" title="Rediģēt tabu">⚙️</button>
+                    <button class="delete-tab-btn" id="deleteTabBtn" title="Dzēst tabu">🗑️</button>
+                </div>
+            </div>
+            <div class="expanded-content" id="expandedContent">
+                <!-- Summary saturs (skata režīms) -->
+            </div>
+            <div class="edit-mode" id="editMode" style="display:none">
+                <div class="structured-editor" id="structuredEditor">
+                    <!-- Dinamiski aizpildās no summary-structured -->
+                </div>
+                <div class="edit-mode-actions">
+                    <button class="save-note-btn" id="editSaveBtn">💾 Saglabāt</button>
+                    <button class="cancel-note-btn" id="editCancelBtn">Atcelt</button>
+                </div>
+            </div>
+            <div class="full-files-section" id="fullFilesSection" style="display:none">
+                <h3>📂 Pilnais konteksts</h3>
+                <ul class="file-list" id="fileList"></ul>
+                <button class="add-file-btn" id="addFileBtn">➕ Jauns fails</button>
+                <div class="file-edit-mode" id="fileEditMode" style="display:none">
+                    <label>Virsraksts</label>
+                    <input type="text" id="fileEditTitle" placeholder="Faila virsraksts">
+                    <label>Saturs (markdown)</label>
+                    <textarea id="fileEditContent" placeholder="Raksti saturu..."></textarea>
+                    <div class="edit-mode-actions">
+                        <button class="save-note-btn" id="fileEditSaveBtn">💾 Saglabāt</button>
+                        <button class="cancel-note-btn" id="fileEditCancelBtn">Atcelt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="quick-note-section">
+                <button class="quick-note-btn" id="quickNoteBtn">⚡ Ātrā doma</button>
+                <div class="quick-note-form" id="quickNoteForm" style="display:none">
+                    <textarea id="quickNoteInput" placeholder="Kas tev ienāca prātā?"></textarea>
+                    <div class="quick-note-actions">
+                        <button class="save-note-btn" id="saveNoteBtn">Saglabāt</button>
+                        <button class="cancel-note-btn" id="cancelNoteBtn">Atcelt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Tab Modal -->
+        <div class="modal-overlay" id="editModal" style="display:none">
+            <div class="modal">
+                <h3 id="modalTitle">Rediģēt tabu</h3>
+                <div class="modal-form">
+                    <label>Nosaukums</label>
+                    <input type="text" id="editName" placeholder="Taba nosaukums">
+
+                    <label>ID (teksta identifikators)</label>
+                    <input type="text" id="editId" placeholder="mans-tabs" disabled>
+
+                    <label>Ikona</label>
+                    <div class="emoji-preview">
+                        <div class="emoji-preview-icon" id="emojiPreview">📝</div>
+                        <input type="text" id="editIcon" placeholder="📝" maxlength="4" style="flex:1">
+                    </div>
+                    <div class="emoji-picker" id="emojiPicker"></div>
+
+                    <label>Krāsa</label>
+                    <input type="color" id="editColor" value="#6366f1">
+
+                    <label>Fona bilde</label>
+                    <input type="text" id="editBgImage" placeholder="https://... vai izvēlies failu ➔">
+                    <button type="button" class="save-note-btn" id="editBgUploadBtn" style="font-size:12px;padding:6px 14px;margin-top:6px;">🖼️ Izvēlēties failu</button>
+                    <img id="editBgPreview" class="image-preview" style="display:none;max-width:200px;max-height:100px;border-radius:8px;object-fit:cover;margin-top:6px;" alt="Priekšskats">
+
+                    <label>Apraksts</label>
+                    <input type="text" id="editDesc" placeholder="Īss apraksts">
+                </div>
+                <div class="modal-actions">
+                    <button class="save-note-btn" id="modalSaveBtn">Saglabāt</button>
+                    <button class="cancel-note-btn" id="modalCancelBtn">Atcelt</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden file input for local image upload -->
+        <input type="file" id="bgImageUpload" accept="image/*" style="display:none">
+
+        <!-- File Viewer Modal -->
+        <div class="modal-overlay" id="fileViewerModal" style="display:none">
+            <div class="modal" style="max-width:700px;max-height:85vh;overflow-y:auto;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                    <h3 id="fileViewerModalTitle" style="margin:0;"></h3>
+                    <button id="fileViewerModalClose" style="background:none;border:none;color:var(--text-secondary);font-size:24px;cursor:pointer;line-height:1;">✕</button>
+                </div>
+                <div id="fileViewerModalContent" style="line-height:1.7;"></div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal-overlay" id="settingsModal" style="display:none">
+            <div class="modal" style="max-width:420px;">
+                <h3>⚙️ Iestatījumi</h3>
+
+                <label style="display:block;margin-top:16px;font-size:13px;color:var(--text-secondary);">GitHub token</label>
+                <input type="password" id="settingsToken" placeholder="github_pat_..."
+                       style="width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#111;color:#fff;margin-top:4px;font-family:monospace;font-size:12px;">
+                <p style="font-size:11px;color:var(--text-secondary);margin-top:4px;">
+                    Fine-grained token ar <b>Contents: Read and write</b> priekš kontesksta-logs-standalone repo.
+                    <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--accent);">Izveidot token →</a>
+                </p>
+
+                <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
+                    <button class="add-tab-btn" id="settingsPullBtn" style="width:100%;text-align:left;">⬇️ Pull — atjaunot no GitHub</button>
+                    <button class="add-tab-btn" id="settingsImportBtn" style="width:100%;text-align:left;">📥 Importēt no faila</button>
+                    <button class="add-tab-btn" id="settingsExportBtn" style="width:100%;text-align:left;">📤 Eksportēt uz failu</button>
+                </div>
+
+                <div class="modal-actions" style="margin-top:20px;">
+                    <button class="save-note-btn" id="settingsSaveBtn">💾 Saglabāt</button>
+                    <button class="cancel-note-btn" id="settingsCloseBtn">Aizvērt</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <span id="versionFooter">Konteksta logs v1.0 — lokali, tavi dati, tava kontrole</span>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+</body>
+</html>
