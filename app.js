@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.3.0';
+  var APP_VERSION = '1.3.1';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -1584,6 +1584,30 @@
       });
     }
 
+    // Settings: Update app — notīra kešu + SW + reload
+    var settingsUpdateBtn = document.getElementById('settingsUpdateBtn');
+    if (settingsUpdateBtn) {
+      settingsUpdateBtn.addEventListener('click', function() {
+        hideModal('settingsModal');
+        if (confirm('Atjaunināt aplikāciju uz jaunāko versiju?\\n\\nTiks notīrīts kešs un pārlādēta lapa. Dati localStorage saglabāsies.')) {
+          // Notīra visus SW kešus
+          if ('caches' in window) {
+            caches.keys().then(function(names) {
+              names.forEach(function(name) { caches.delete(name); });
+            });
+          }
+          // Noņem Service Worker
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(regs) {
+              regs.forEach(function(reg) { reg.unregister(); });
+            });
+          }
+          // Pārlādē
+          setTimeout(function() { location.reload(true); }, 500);
+        }
+      });
+    }
+
     // Back button
     var backBtn = document.getElementById('backBtn');
     if (backBtn) backBtn.addEventListener('click', function() { app.closeTab(); });
@@ -2189,6 +2213,27 @@
     // Version display
     var vf = document.getElementById('versionFooter');
     if (vf) vf.textContent = 'Konteksta logs v' + APP_VERSION + ' ' + BUILD_ENV;
+
+    // Auto-check for new version (compare with version.txt on server)
+    fetch('version.txt?t=' + Date.now(), { cache: 'no-cache' })
+      .then(function(r) { return r.text(); })
+      .then(function(remoteVer) {
+        remoteVer = remoteVer.trim();
+        if (remoteVer && remoteVer !== APP_VERSION) {
+          if (vf) vf.textContent = 'Konteksta logs v' + APP_VERSION + ' ' + BUILD_ENV + '  ⚡ v' + remoteVer + ' pieejama!';
+          vf.style.color = '#f59e0b';
+          vf.style.cursor = 'pointer';
+          vf.title = 'Spied lai atjauninātu uz v' + remoteVer;
+          vf.onclick = function() {
+            if (confirm('Atjaunināt uz v' + remoteVer + '?')) {
+              caches.keys().then(function(names) { names.forEach(function(n) { caches.delete(n); }); });
+              navigator.serviceWorker.getRegistrations().then(function(regs) { regs.forEach(function(r) { r.unregister(); }); });
+              setTimeout(function() { location.reload(true); }, 300);
+            }
+          };
+        }
+      })
+      .catch(function() { /* klusām — nav kritiski */ });
   }
 
   /* ─── Export ───────────────────────────────────────────────────── */
