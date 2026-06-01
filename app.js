@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.5.1';
+  var APP_VERSION = '1.5.2';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -1033,8 +1033,7 @@
         '<input type="text" class="section-item-title" value="' + escAttr(item.text) + '" placeholder="Ieraksta virsraksts">' +
         '<button class="section-item-delete" title="Dzēst ierakstu">🗑️</button>' +
       '</div>' +
-      (file ? '<div class="section-item-tags"><span class="section-tag">' + escHtml(file) + ' <button class="tag-remove" title="Noņemt tagu">✕</button></span></div>' : '') +
-      '<button class="add-context-btn">📄 Paplašināts konteksts</button>' +
+      '<button class="add-context-btn">📄 Paplašināts konteksts' + (file ? ' <span class="file-check" title="Pievienots paplašināts konteksts: ' + escAttr(file) + '">✅</span>' : '') + '</button>' +
     '</div>';
   }
 
@@ -1063,6 +1062,7 @@
         '.add-item-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(99,102,241,0.05); }' +
         '.add-context-btn { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }' +
         '.add-context-btn:hover { border-color: var(--accent); color: var(--accent); }' +
+        '.file-check { font-size: 12px; margin-left: 4px; opacity: 0.8; }' +
         '.section-item.checked .section-item-title { text-decoration: line-through; opacity: 0.6; }' +
         '.edit-mode-actions { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; }' +
         '.edit-mode-actions .save-note-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; cursor: pointer; }' +
@@ -2442,12 +2442,9 @@
               .replace(/^-+|-+$/g, '') + '.md';
             if (!filename || filename === '.md') filename = 'konteksts-' + Date.now() + '.md';
 
-            // Set the file tag on the item
-            var tagsContainer = itemEl.querySelector('.section-item-tags');
-            if (tagsContainer) {
-              tagsContainer.innerHTML = '<span class="section-tag">' + escHtml(filename) + ' <button class="tag-remove" title="Noņemt tagu">✕</button></span>';
-            }
             itemEl.setAttribute('data-file', filename);
+            // Update button to show green checkmark
+            contextBtn.innerHTML = '📄 Paplašināts konteksts <span class="file-check" title="Pievienots paplašināts konteksts: ' + escAttr(filename) + '">✅</span>';
             currentFile = filename;
           }
 
@@ -2480,6 +2477,11 @@
           var fs = document.getElementById('fullFilesSection');
           if (fs) fs.style.display = 'block';
           fileEditMode.style.display = 'block';
+
+          // Smooth scroll to the file editor
+          setTimeout(function() {
+            fileEditMode.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
 
           // Set context for the shared save/cancel handlers
           _fileEditContext = {
