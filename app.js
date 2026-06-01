@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.5.0';
+  var APP_VERSION = '1.5.1';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -281,13 +281,16 @@
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', tabId);
 
-    // Use a transparent drag image
-    var dragImg = document.createElement('div');
-    dragImg.style.width = '1px';
-    dragImg.style.height = '1px';
-    document.body.appendChild(dragImg);
-    e.dataTransfer.setDragImage(dragImg, 0, 0);
-    setTimeout(function() { document.body.removeChild(dragImg); }, 0);
+    // Create a semi-transparent clone as drag image
+    var clone = card.cloneNode(true);
+    clone.style.position = 'absolute';
+    clone.style.top = '-9999px';
+    clone.style.opacity = '0.7';
+    clone.style.width = card.offsetWidth + 'px';
+    clone.style.transform = 'none';
+    document.body.appendChild(clone);
+    e.dataTransfer.setDragImage(clone, clone.offsetWidth / 2, 20);
+    setTimeout(function() { document.body.removeChild(clone); }, 0);
   };
 
   app._handleTabDragOver = function(e) {
@@ -421,13 +424,16 @@
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', 'item');
 
-    // Transparent drag image
-    var dragImg = document.createElement('div');
-    dragImg.style.width = '1px';
-    dragImg.style.height = '1px';
-    document.body.appendChild(dragImg);
-    e.dataTransfer.setDragImage(dragImg, 0, 0);
-    setTimeout(function() { document.body.removeChild(dragImg); }, 0);
+    // Create a semi-transparent clone as drag image for visual feedback
+    var clone = item.cloneNode(true);
+    clone.style.position = 'absolute';
+    clone.style.top = '-9999px';
+    clone.style.opacity = '0.7';
+    clone.style.width = item.offsetWidth + 'px';
+    clone.style.transform = 'none';
+    document.body.appendChild(clone);
+    e.dataTransfer.setDragImage(clone, clone.offsetWidth / 2, 20);
+    setTimeout(function() { document.body.removeChild(clone); }, 0);
   };
 
   app._handleItemDragOver = function(e) {
@@ -1027,10 +1033,7 @@
         '<input type="text" class="section-item-title" value="' + escAttr(item.text) + '" placeholder="Ieraksta virsraksts">' +
         '<button class="section-item-delete" title="Dzēst ierakstu">🗑️</button>' +
       '</div>' +
-      '<input type="text" class="section-item-desc" value="' + escAttr(desc) + '" placeholder="Apraksts (pēc izvēles)...">' +
-      '<div class="section-item-tags">' +
-        (file ? '<span class="section-tag">' + escHtml(file) + ' <button class="tag-remove" title="Noņemt tagu">✕</button></span>' : '') +
-      '</div>' +
+      (file ? '<div class="section-item-tags"><span class="section-tag">' + escHtml(file) + ' <button class="tag-remove" title="Noņemt tagu">✕</button></span></div>' : '') +
       '<button class="add-context-btn">📄 Paplašināts konteksts</button>' +
     '</div>';
   }
@@ -1047,26 +1050,28 @@
       style.textContent =
         '.section-block { border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px; background: var(--bg-card); }' +
         '.section-block h3 { margin: 0 0 12px 0; font-size: 16px; color: var(--text-primary); }' +
-        '.section-item { border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; background: var(--bg-secondary); position: relative; }' +
-        '.section-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }' +
+        '.section-item { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; background: var(--bg-secondary); position: relative; transition: transform 0.15s ease, box-shadow 0.15s ease; }' +
+        '.section-item-header { display: flex; align-items: center; gap: 8px; }' +
         '.section-item-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); flex-shrink: 0; }' +
         '.section-item-title { flex: 1; background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 14px; color: var(--text-primary); outline: none; }' +
         '.section-item-title:focus { border-color: var(--accent); }' +
-        '.section-item-desc { width: 100%; background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 13px; color: var(--text-secondary); outline: none; box-sizing: border-box; margin-bottom: 8px; }' +
-        '.section-item-desc:focus { border-color: var(--accent); }' +
-        '.section-item-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; min-height: 26px; }' +
+        '.section-item-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }' +
         '.section-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--accent); color: #fff; font-size: 12px; padding: 3px 10px; border-radius: 12px; }' +
         '.section-tag .tag-remove { background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; font-size: 12px; padding: 0; line-height: 1; }' +
         '.section-tag .tag-remove:hover { color: #fff; }' +
         '.add-item-btn { display: block; width: 100%; border: 2px dashed var(--border); border-radius: 8px; padding: 10px; background: transparent; color: var(--text-muted); font-size: 13px; cursor: pointer; transition: all 0.2s; margin-top: 4px; }' +
         '.add-item-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(99,102,241,0.05); }' +
-        '.add-context-btn { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }' +
+        '.add-context-btn { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }' +
         '.add-context-btn:hover { border-color: var(--accent); color: var(--accent); }' +
         '.section-item.checked .section-item-title { text-decoration: line-through; opacity: 0.6; }' +
-        '.section-item.checked .section-item-desc { opacity: 0.6; }' +
         '.edit-mode-actions { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; }' +
         '.edit-mode-actions .save-note-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; cursor: pointer; }' +
         '.edit-mode-actions .cancel-note-btn { background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 10px 20px; font-size: 14px; color: var(--text-muted); cursor: pointer; }' +
+        '.edit-mode-toolbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; margin: -16px -16px 12px -16px; background: var(--bg-card); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }' +
+        '.edit-mode-toolbar .toolbar-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }' +
+        '.edit-mode-toolbar .toolbar-actions { display: flex; gap: 8px; }' +
+        '.edit-mode-toolbar .save-note-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; cursor: pointer; }' +
+        '.edit-mode-toolbar .cancel-note-btn { background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 13px; color: var(--text-muted); cursor: pointer; }' +
         '.structured-editor { max-height: 70vh; overflow-y: auto; padding-right: 4px; }' +
         '.structured-editor::-webkit-scrollbar { width: 6px; }' +
         '.structured-editor::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }' +
@@ -2191,6 +2196,22 @@
         if (editMode) editMode.style.display = 'none';
         var expandedContent = document.getElementById('expandedContent');
         if (expandedContent) expandedContent.style.display = '';
+      });
+    }
+
+    // Wire top toolbar buttons to trigger the same handlers
+    var editSaveTopBtn = document.getElementById('editSaveTopBtn');
+    if (editSaveTopBtn) {
+      editSaveTopBtn.addEventListener('click', function() {
+        var bottomSave = document.getElementById('editSaveBtn');
+        if (bottomSave) bottomSave.click();
+      });
+    }
+    var editCancelTopBtn = document.getElementById('editCancelTopBtn');
+    if (editCancelTopBtn) {
+      editCancelTopBtn.addEventListener('click', function() {
+        var bottomCancel = document.getElementById('editCancelBtn');
+        if (bottomCancel) bottomCancel.click();
       });
     }
 

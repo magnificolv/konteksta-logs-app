@@ -517,18 +517,19 @@ body::before {
 .section-item-drag-handle {
     position: absolute;
     top: 8px;
-    left: -8px;
-    font-size: 16px;
+    left: -6px;
+    font-size: 18px;
     color: var(--text-muted);
-    opacity: 0;
+    opacity: 0.35;
     transition: opacity 0.2s;
     cursor: grab;
     z-index: 2;
     user-select: none;
+    padding: 4px 4px 4px 2px;
 }
 
 .section-item:hover .section-item-drag-handle {
-    opacity: 0.7;
+    opacity: 1;
 }
 
 .section-item-drag-handle:active {
