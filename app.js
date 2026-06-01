@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.5.2';
+  var APP_VERSION = '1.5.3';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -689,6 +689,7 @@
     var tabId = tab.id;
     var parts = text.split(/(?=^## )/m);
     var html = '';
+    var sectionsRendered = 0;
 
     parts.forEach(function(part) {
       part = part.trim();
@@ -704,6 +705,9 @@
         var lines = rest.split('\n');
         var inList = false;
         var listItems = [];
+        var sectionIdx = sectionsRendered;
+        var itemIdx = 0;
+        sectionsRendered++;
 
         lines.forEach(function(line) {
           line = line.trim();
@@ -715,7 +719,8 @@
             var checked = cbMatch[1];
             var itemText = cbMatch[2];
             var isChecked = (checked === 'x' || checked === 'X');
-            var cbHtml = '<span class="cb-icon' + (isChecked ? ' cb-checked' : ' cb-unchecked') + '"></span>';
+            var cbHtml = '<span class="cb-icon' + (isChecked ? ' cb-checked' : ' cb-unchecked') + '" data-section="' + sectionIdx + '" data-item="' + itemIdx + '" onclick="app.toggleSummaryCheckbox(\'' + escAttr(tabId) + '\',' + sectionIdx + ',' + itemIdx + ')"></span>';
+            itemIdx++;
             var rendered = renderInlineLinks(itemText, tabId);
             listItems.push('<li class="summary-item">' + cbHtml + '<span class="summary-item-text">' + rendered + '</span></li>');
             inList = true;
@@ -776,6 +781,60 @@
     });
 
     return html;
+  };
+
+  // Toggle checkbox directly from summary view
+  app.toggleSummaryCheckbox = function(tabId, sectionIndex, itemIndex) {
+    var data = app.loadData();
+    var tab = null;
+    for (var i = 0; i < data.tabs.length; i++) {
+      if (data.tabs[i].id === tabId) { tab = data.tabs[i]; break; }
+    }
+    if (!tab || !tab.summary) return;
+
+    var parsed = parseSummaryToSections(tab.summary);
+    if (sectionIndex === -1) {
+      // Orphan items — find the section-less content
+      // Re-parse differently: find all - [x] items outside ## headings
+      var lines = tab.summary.split('\n');
+      var inSection = false;
+      var orphanCount = 0;
+      for (var li = 0; li < lines.length; li++) {
+        var line = lines[li].trim();
+        if (line.match(/^## /)) { inSection = true; continue; }
+        if (!inSection) {
+          var cbMatch = line.match(/^- \[([ x])\] (.+)$/);
+          if (cbMatch) {
+            if (orphanCount === itemIndex) {
+              var newChecked = (cbMatch[1] === 'x' || cbMatch[1] === 'X') ? ' ' : 'x';
+              lines[li] = '- [' + newChecked + '] ' + cbMatch[2];
+              tab.summary = lines.join('\n');
+              tab.updated = new Date().toISOString();
+              app.saveData(data);
+              var contentEl = document.getElementById('expandedContent');
+              if (contentEl) contentEl.innerHTML = app.renderSummaryHtml(tab);
+              return;
+            }
+            orphanCount++;
+          }
+        }
+      }
+      return;
+    }
+
+    // Normal section items
+    if (sectionIndex >= parsed.sections.length) return;
+    var section = parsed.sections[sectionIndex];
+    if (itemIndex >= section.items.length) return;
+    section.items[itemIndex].checked = !section.items[itemIndex].checked;
+
+    tab.summary = sectionsToMarkdown(parsed);
+    tab.updated = new Date().toISOString();
+    app.saveData(data);
+
+    // Re-render
+    var contentEl = document.getElementById('expandedContent');
+    if (contentEl) contentEl.innerHTML = app.renderSummaryHtml(tab);
   };
 
   function renderInlineLinks(text, tabId) {
@@ -896,10 +955,12 @@
     // Blockquotes
     html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
 
-    // Checkbox list items
+    // Checkbox list items (orphan — outside sections)
+    var orphanIdx = 0;
     html = html.replace(/^- \[(.)\] (.+)$/gm, function(match, checked, text) {
       var isChecked = (checked === 'x' || checked === 'X');
-      return '<li class="summary-item"><span class="cb-icon' + (isChecked ? ' cb-checked' : ' cb-unchecked') + '"></span><span class="summary-item-text">' + text + '</span></li>';
+      var idx = orphanIdx++;
+      return '<li class="summary-item"><span class="cb-icon' + (isChecked ? ' cb-checked' : ' cb-unchecked') + '" data-section="-1" data-item="' + idx + '" onclick="app.toggleSummaryCheckbox(\'' + escAttr(tabId) + '\',-1,' + idx + ')"></span><span class="summary-item-text">' + text + '</span></li>';
     });
 
     // Plain list items
