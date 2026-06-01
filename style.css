@@ -450,6 +450,110 @@ body::before {
     transition: all 0.3s ease;
 }
 
+/* ─── Tab Drag & Drop ─────────────────────────────────────────── */
+
+.tab-card {
+    cursor: grab;
+    user-select: none;
+}
+
+.tab-card:active {
+    cursor: grabbing;
+}
+
+.tab-drag-handle {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 14px;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.tab-card:hover .tab-drag-handle {
+    opacity: 1;
+}
+
+/* Prevent text selection while dragging */
+.tab-grid.drag-active {
+    user-select: none;
+}
+
+.tab-grid.drag-active .tab-card {
+    cursor: grabbing;
+}
+
+.tab-drop-indicator {
+    width: 4px;
+    min-height: 80px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+    animation: dropIndicatorPulse 0.8s ease-in-out infinite;
+    box-shadow: 0 0 12px var(--accent-glow);
+}
+
+@keyframes dropIndicatorPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+.tab-card.dragging {
+    opacity: 0.4;
+    transform: scale(0.95);
+    transition: all 0.2s ease;
+}
+
+/* ─── Item Drag & Drop ────────────────────────────────────────── */
+
+.section-item {
+    position: relative;
+    cursor: grab;
+}
+
+.section-item-drag-handle {
+    position: absolute;
+    top: 8px;
+    left: -8px;
+    font-size: 16px;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.2s;
+    cursor: grab;
+    z-index: 2;
+    user-select: none;
+}
+
+.section-item:hover .section-item-drag-handle {
+    opacity: 0.7;
+}
+
+.section-item-drag-handle:active {
+    cursor: grabbing;
+}
+
+.section-item.item-dragging {
+    opacity: 0.35;
+    transform: scale(0.97);
+    transition: all 0.15s ease;
+}
+
+.item-drop-indicator {
+    height: 4px;
+    background: var(--accent);
+    border-radius: 2px;
+    margin: 4px 0;
+    animation: dropIndicatorPulse 0.8s ease-in-out infinite;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.section-items {
+    min-height: 20px; /* ensure drop target is visible even when empty */
+}
+
 /* ---------------------------------------------------------------------------
    Expanded Panel
    --------------------------------------------------------------------------- */

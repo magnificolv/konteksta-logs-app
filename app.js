@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.4.1';
+  var APP_VERSION = '1.5.0';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -239,7 +239,7 @@
     var grid = document.getElementById('tabGrid');
     if (!grid) return;
     var data = app.loadData();
-    var html = data.tabs.map(function(tab) {
+    var html = data.tabs.map(function(tab, index) {
       var hasImage = tab.image && tab.image.length > 0;
       var noImgClass = hasImage ? '' : ' no-image';
       var color = escAttr(tab.color || '#6366f1');
@@ -250,20 +250,336 @@
       if (hasImage) {
         imgHtml = '<div class="tab-card-image" style="background-image:url(' + escAttr(tab.image) + ')"></div>';
       }
-      return '<div class="tab-card' + noImgClass + '" style="--tab-color: ' + color + '" onclick="app.openTab(\'' + id + '\')" data-tab-id="' + id + '">' +
+      return '<div class="tab-card' + noImgClass + '" style="--tab-color: ' + color + '" onclick="app.openTab(\'' + id + '\')" data-tab-id="' + id + '" data-tab-index="' + index + '" draggable="true">' +
         '<div class="tab-card-header">' +
           '<div class="tab-card-icon">' + icon + '</div>' +
           '<div class="tab-card-title">' + name + '</div>' +
         '</div>' +
         imgHtml +
+        '<div class="tab-drag-handle" title="Vilkt lai pārkārtotu">⠿</div>' +
       '</div>';
     }).join('');
     grid.innerHTML = html;
   };
 
+  /* ─── Tab Drag & Drop ──────────────────────────────────────────── */
+
+  var _tabDragData = null; // { tabId, sourceIndex }
+  var _tabWasDragged = false; // prevent click after drag
+
+  app._handleTabDragStart = function(e) {
+    var card = e.target.closest('.tab-card');
+    if (!card) return;
+    // Don't start drag if clicking buttons/inputs inside
+    if (e.target.closest('button, input, a')) return;
+
+    var tabId = card.getAttribute('data-tab-id');
+    var sourceIndex = parseInt(card.getAttribute('data-tab-index'));
+    _tabDragData = { tabId: tabId, sourceIndex: sourceIndex };
+
+    card.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', tabId);
+
+    // Use a transparent drag image
+    var dragImg = document.createElement('div');
+    dragImg.style.width = '1px';
+    dragImg.style.height = '1px';
+    document.body.appendChild(dragImg);
+    e.dataTransfer.setDragImage(dragImg, 0, 0);
+    setTimeout(function() { document.body.removeChild(dragImg); }, 0);
+  };
+
+  app._handleTabDragOver = function(e) {
+    e.preventDefault();
+    if (!_tabDragData) return;
+    e.dataTransfer.dropEffect = 'move';
+
+    // Clear previous indicators
+    var prev = document.querySelector('.tab-drop-indicator');
+    if (prev) prev.remove();
+
+    var card = e.target.closest('.tab-card');
+    if (!card || card.classList.contains('dragging')) return;
+
+    var rect = card.getBoundingClientRect();
+    var midX = rect.left + rect.width / 2;
+    var midY = rect.top + rect.height / 2;
+    var after = false;
+
+    // Determine if dropping before or after based on drag direction
+    if (Math.abs(e.clientX - midX) > Math.abs(e.clientY - midY)) {
+      after = e.clientX > midX;
+    } else {
+      after = e.clientY > midY;
+    }
+
+    var indicator = document.createElement('div');
+    indicator.className = 'tab-drop-indicator';
+    if (after) {
+      card.after(indicator);
+    } else {
+      card.before(indicator);
+    }
+  };
+
+  app._handleTabDragLeave = function(e) {
+    // Only remove indicator when truly leaving the grid
+    if (!e.target.closest('#tabGrid')) {
+      var prev = document.querySelector('.tab-drop-indicator');
+      if (prev) prev.remove();
+    }
+  };
+
+  app._handleTabDrop = function(e) {
+    e.preventDefault();
+    var indicator = document.querySelector('.tab-drop-indicator');
+    if (indicator) indicator.remove();
+
+    var card = document.querySelector('.tab-card.dragging');
+    if (card) card.classList.remove('dragging');
+
+    if (!_tabDragData) return;
+
+    var dropCard = e.target.closest('.tab-card');
+    if (!dropCard || dropCard.classList.contains('dragging')) {
+      _tabDragData = null;
+      return;
+    }
+
+    var targetIndex = parseInt(dropCard.getAttribute('data-tab-index'));
+    var sourceId = _tabDragData.tabId;
+    var sourceIndex = _tabDragData.sourceIndex;
+    _tabDragData = null;
+
+    if (sourceIndex === targetIndex) return;
+
+    _tabWasDragged = true;
+
+    var data = app.loadData();
+    var tabs = data.tabs;
+
+    // Determine insert position
+    var rect = dropCard.getBoundingClientRect();
+    var midY = rect.top + rect.height / 2;
+    var midX = rect.left + rect.width / 2;
+    var insertAfter = (Math.abs(e.clientX - midX) > Math.abs(e.clientY - midY))
+      ? e.clientX > midX
+      : e.clientY > midY;
+
+    // Find the dragged tab
+    var draggedTab = null;
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i].id === sourceId) {
+        draggedTab = tabs.splice(i, 1)[0];
+        break;
+      }
+    }
+    if (!draggedTab) return;
+
+    // Recalculate target (array may have shifted)
+    var insertIdx = insertAfter ? targetIndex + 1 : targetIndex;
+    if (sourceIndex < insertIdx) insertIdx--; // adjustment after removal
+
+    tabs.splice(insertIdx, 0, draggedTab);
+    data.updated = new Date().toISOString();
+    app.saveData(data);
+    app.renderTabs();
+    app.updateTimestamps();
+  };
+
+  app._handleTabDragEnd = function(e) {
+    var card = document.querySelector('.tab-card.dragging');
+    if (card) card.classList.remove('dragging');
+    var indicator = document.querySelector('.tab-drop-indicator');
+    if (indicator) indicator.remove();
+    _tabDragData = null;
+  };
+
+  /* ─── Item Drag & Drop (starp sekcijām) ───────────────────────── */
+
+  var _itemDragData = null; // { sourceSection, itemEl }
+
+  app._handleItemDragStart = function(e) {
+    var item = e.target.closest('.section-item');
+    if (!item) return;
+    // Don't start drag from inputs/buttons
+    if (e.target.closest('input, textarea, button')) {
+      e.preventDefault();
+      return;
+    }
+
+    var sourceSection = item.closest('.section-block');
+    if (!sourceSection) return;
+
+    _itemDragData = {
+      sourceSection: sourceSection,
+      itemEl: item
+    };
+
+    item.classList.add('item-dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', 'item');
+
+    // Transparent drag image
+    var dragImg = document.createElement('div');
+    dragImg.style.width = '1px';
+    dragImg.style.height = '1px';
+    document.body.appendChild(dragImg);
+    e.dataTransfer.setDragImage(dragImg, 0, 0);
+    setTimeout(function() { document.body.removeChild(dragImg); }, 0);
+  };
+
+  app._handleItemDragOver = function(e) {
+    if (!_itemDragData) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+
+    // Find the target section-items container
+    var sectionBlock = e.target.closest('.section-block');
+    if (!sectionBlock) return;
+
+    var itemsContainer = sectionBlock.querySelector('.section-items');
+    if (!itemsContainer) return;
+
+    // Remove previous indicators
+    var prev = document.querySelector('.item-drop-indicator');
+    if (prev) prev.remove();
+
+    // Don't show indicator if same as source and only one item
+    if (sectionBlock === _itemDragData.sourceSection &&
+        itemsContainer.querySelectorAll('.section-item:not(.item-dragging)').length === 0) {
+      return;
+    }
+
+    // Find insert position
+    var items = itemsContainer.querySelectorAll('.section-item:not(.item-dragging)');
+    var indicator = document.createElement('div');
+    indicator.className = 'item-drop-indicator';
+
+    if (items.length === 0) {
+      itemsContainer.appendChild(indicator);
+      return;
+    }
+
+    // Find the closest item to cursor
+    var closestItem = null;
+    var closestDist = Infinity;
+    items.forEach(function(item) {
+      var rect = item.getBoundingClientRect();
+      var midY = rect.top + rect.height / 2;
+      var dist = Math.abs(e.clientY - midY);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestItem = item;
+      }
+    });
+
+    if (closestItem) {
+      var rect = closestItem.getBoundingClientRect();
+      var midY = rect.top + rect.height / 2;
+      if (e.clientY > midY) {
+        closestItem.after(indicator);
+      } else {
+        closestItem.before(indicator);
+      }
+    }
+  };
+
+  app._handleItemDrop = function(e) {
+    e.preventDefault();
+    var indicator = document.querySelector('.item-drop-indicator');
+    if (!indicator || !_itemDragData) {
+      if (indicator) indicator.remove();
+      _itemDragData = null;
+      return;
+    }
+
+    var item = _itemDragData.itemEl;
+    item.classList.remove('item-dragging');
+
+    // Move the item element to before the indicator
+    indicator.parentNode.insertBefore(item, indicator);
+    indicator.remove();
+
+    // Clear data attributes (will be rebuilt on save)
+    item.setAttribute('data-section-dirty', '1');
+
+    // Auto-save immediately after drop
+    _triggerStructuredSave();
+
+    _itemDragData = null;
+  };
+
+  app._handleItemDragEnd = function(e) {
+    var item = document.querySelector('.section-item.item-dragging');
+    if (item) item.classList.remove('item-dragging');
+    var indicator = document.querySelector('.item-drop-indicator');
+    if (indicator) indicator.remove();
+    _itemDragData = null;
+  };
+
+  function _triggerStructuredSave() {
+    // Trigger save from structured editor without closing it
+    if (!currentTabId) return;
+    var editor = document.getElementById('structuredEditor');
+    if (!editor) return;
+
+    var data = app.loadData();
+    var tab = null;
+    for (var i = 0; i < data.tabs.length; i++) {
+      if (data.tabs[i].id === currentTabId) { tab = data.tabs[i]; break; }
+    }
+    if (!tab) return;
+
+    var sectionBlocks = editor.querySelectorAll('.section-block');
+    var sections = [];
+    sectionBlocks.forEach(function(block) {
+      var headingEl = block.querySelector('h3');
+      if (!headingEl) return;
+      var heading = headingEl.textContent || '';
+      var items = [];
+      var itemEls = block.querySelectorAll('.section-item');
+      itemEls.forEach(function(itemEl) {
+        var checkbox = itemEl.querySelector('.section-item-checkbox');
+        var titleInput = itemEl.querySelector('.section-item-title');
+        var descInput = itemEl.querySelector('.section-item-desc');
+        var tagEl = itemEl.querySelector('.section-tag');
+        var file = itemEl.getAttribute('data-file') || '';
+        if (!file && tagEl) {
+          file = tagEl.textContent.replace('✕', '').trim();
+        }
+        items.push({
+          checked: checkbox ? checkbox.checked : false,
+          text: titleInput ? titleInput.value : '',
+          desc: descInput ? descInput.value : '',
+          file: file
+        });
+      });
+      sections.push({ heading: heading, items: items });
+    });
+
+    // Parse current title from summary
+    var title = tab.name || '';
+    var summaryLines = (tab.summary || '').split('\n');
+    if (summaryLines.length > 0) {
+      var fmt = summaryLines[0].trim();
+      if (fmt.match(/^# /)) title = fmt.replace(/^# /, '').trim();
+    }
+
+    tab.summary = sectionsToMarkdown({ title: title, sections: sections });
+    tab.updated = new Date().toISOString();
+    app.saveData(data);
+  }
+
   /* ─── Tab Detail — Flask stilā ───────────────────────────────── */
 
   app.openTab = function(tabId) {
+    // Ignore if we just completed a drag
+    if (_tabWasDragged) {
+      _tabWasDragged = false;
+      return;
+    }
     var data = app.loadData();
     var tab = null;
     for (var i = 0; i < data.tabs.length; i++) {
@@ -704,7 +1020,8 @@
     var checkedClass = item.checked ? ' checked' : '';
     var file = item.file || '';
     var desc = item.desc || '';
-    return '<div class="section-item' + checkedClass + '" data-section="' + sectionIndex + '" data-item="' + itemIndex + '" data-file="' + escAttr(file) + '">' +
+    return '<div class="section-item' + checkedClass + '" data-section="' + sectionIndex + '" data-item="' + itemIndex + '" data-file="' + escAttr(file) + '" draggable="true">' +
+      '<div class="section-item-drag-handle" title="Vilkt lai pārvietotu">⠿</div>' +
       '<div class="section-item-header">' +
         '<input type="checkbox" class="section-item-checkbox" ' + checkedAttr + '>' +
         '<input type="text" class="section-item-title" value="' + escAttr(item.text) + '" placeholder="Ieraksta virsraksts">' +
@@ -730,7 +1047,7 @@
       style.textContent =
         '.section-block { border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px; background: var(--bg-card); }' +
         '.section-block h3 { margin: 0 0 12px 0; font-size: 16px; color: var(--text-primary); }' +
-        '.section-item { border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; background: var(--bg-secondary); }' +
+        '.section-item { border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; background: var(--bg-secondary); position: relative; }' +
         '.section-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }' +
         '.section-item-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); flex-shrink: 0; }' +
         '.section-item-title { flex: 1; background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 14px; color: var(--text-primary); outline: none; }' +
@@ -2166,6 +2483,12 @@
           }
         }
       });
+
+      // Item drag & drop event delegation
+      structuredEditor.addEventListener('dragstart', function(e) { app._handleItemDragStart(e); });
+      structuredEditor.addEventListener('dragover', function(e) { app._handleItemDragOver(e); });
+      structuredEditor.addEventListener('drop', function(e) { app._handleItemDrop(e); });
+      structuredEditor.addEventListener('dragend', function(e) { app._handleItemDragEnd(e); });
     }
 
     // Add file button
@@ -2195,6 +2518,16 @@
     var fileEditCancelBtn = document.getElementById('fileEditCancelBtn');
     if (fileEditSaveBtn) fileEditSaveBtn.addEventListener('click', saveFileHandler);
     if (fileEditCancelBtn) fileEditCancelBtn.addEventListener('click', cancelFileHandler);
+
+    // Tab grid drag & drop event delegation
+    var tabGrid = document.getElementById('tabGrid');
+    if (tabGrid) {
+      tabGrid.addEventListener('dragstart', function(e) { app._handleTabDragStart(e); });
+      tabGrid.addEventListener('dragover', function(e) { app._handleTabDragOver(e); });
+      tabGrid.addEventListener('dragleave', function(e) { app._handleTabDragLeave(e); });
+      tabGrid.addEventListener('drop', function(e) { app._handleTabDrop(e); });
+      tabGrid.addEventListener('dragend', function(e) { app._handleTabDragEnd(e); });
+    }
 
     // Version display
     var vf = document.getElementById('versionFooter');
