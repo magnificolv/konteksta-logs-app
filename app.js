@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.2';
+  var APP_VERSION = '1.6.3';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -21,28 +21,33 @@
 
   /* ─── Icon Pack (Grok Imagine emoji replacements) ─────────────── */
   var ICON_PACK = [
-    {id:'ai',label:'AI'},{id:'anchor',label:'Enkurs'},{id:'archive',label:'Arhīvs'},{id:'balloon',label:'Balons'},
-    {id:'basketball',label:'Basketbols'},{id:'battery',label:'Enerģija'},{id:'bike',label:'Velosipēds'},{id:'books',label:'Grāmatas'},
-    {id:'brush',label:'Ota'},{id:'cake',label:'Kūka'},{id:'calendar',label:'Kalendārs'},{id:'camera',label:'Media'},
-    {id:'candle',label:'Svece'},{id:'castle',label:'Pils'},{id:'cat',label:'Kaķis'},{id:'chat',label:'Čats'},
-    {id:'clock',label:'Laiks'},{id:'cloud',label:'Mākonis'},{id:'code',label:'Kods'},{id:'coffee',label:'Kafija'},
-    {id:'compass',label:'Kompass'},{id:'crown',label:'Kronis'},{id:'crystalball',label:'Kristāla bumba'},{id:'diamond',label:'Dimants'},
-    {id:'dice',label:'Kauliņi'},{id:'family',label:'Ģimene'},{id:'film',label:'Filmas'},{id:'fire',label:'Uguns'},
-    {id:'fish',label:'Zivs'},{id:'fitness',label:'Sports'},{id:'flower',label:'Zieds'},{id:'food',label:'Ēdiens'},
-    {id:'football',label:'Futbols'},{id:'game',label:'Spēles'},{id:'gift',label:'Dāvana'},{id:'goals',label:'Mērķi'},
-    {id:'guitar',label:'Ģitāra'},{id:'headphones',label:'Austiņas'},{id:'health',label:'Veselība'},{id:'home',label:'Māja'},
-    {id:'hourglass',label:'Smilšu pulkstenis'},{id:'idea',label:'Ideja'},{id:'key',label:'Atslēga'},{id:'learn',label:'Mācības'},
-    {id:'lightning',label:'Zibens'},{id:'lock',label:'Privāts'},{id:'love',label:'Mīlestība'},{id:'magnifier',label:'Lupa'},
-    {id:'map',label:'Karte'},{id:'mic',label:'Mikrofons'},{id:'mind',label:'Prāts'},{id:'money',label:'Nauda'},
-    {id:'moon',label:'Miegs'},{id:'mountain',label:'Kalns'},{id:'music',label:'Mūzika'},{id:'nature',label:'Daba'},
-    {id:'notes',label:'Piezīmes'},{id:'palette',label:'Palete'},{id:'party',label:'Ballīte'},{id:'people',label:'Cilvēki'},
-    {id:'pet',label:'Mīlulis'},{id:'phone',label:'Tel'},{id:'piano',label:'Klavieres'},{id:'pizza',label:'Pica'},
-    {id:'polaroid',label:'Polaroid'},{id:'potion',label:'Eliksīrs'},{id:'robot',label:'Robots'},{id:'rocket',label:'Projekti'},
-    {id:'shield',label:'Vairogs'},{id:'shop',label:'Iepirkumi'},{id:'skate',label:'Skeitbords'},{id:'snowflake',label:'Sniegpārsla'},
-    {id:'speed',label:'Ātrums'},{id:'star',label:'Favorīti'},{id:'sun',label:'Saule'},{id:'surf',label:'Sērfings'},
+    {id:'ai',label:'AI'},{id:'anchor',label:'Enkurs'},{id:'archive',label:'Arhīvs'},{id:'atom',label:'Atoms'},
+    {id:'balloon',label:'Balons'},{id:'basketball',label:'Basketbols'},{id:'battery',label:'Enerģija'},{id:'bike',label:'Velosipēds'},
+    {id:'books',label:'Grāmatas'},{id:'brush',label:'Ota'},{id:'cake',label:'Kūka'},{id:'calendar',label:'Kalendārs'},
+    {id:'camera',label:'Media'},{id:'candle',label:'Svece'},{id:'castle',label:'Pils'},{id:'cat',label:'Kaķis'},
+    {id:'chat',label:'Čats'},{id:'chess',label:'Šahs'},{id:'clock',label:'Laiks'},{id:'cloud',label:'Mākonis'},
+    {id:'code',label:'Kods'},{id:'coffee',label:'Kafija'},{id:'compass',label:'Kompass'},{id:'crown',label:'Kronis'},
+    {id:'crystalball',label:'Kristāla bumba'},{id:'diamond',label:'Dimants'},{id:'dice',label:'Kauliņi'},{id:'dna',label:'DNS'},
+    {id:'dragon',label:'Pūķis'},{id:'family',label:'Ģimene'},{id:'film',label:'Filmas'},{id:'fire',label:'Uguns'},
+    {id:'fish',label:'Zivs'},{id:'fitness',label:'Sports'},{id:'flask',label:'Kolba'},{id:'flower',label:'Zieds'},
+    {id:'food',label:'Ēdiens'},{id:'football',label:'Futbols'},{id:'fox',label:'Lapsa'},{id:'game',label:'Spēles'},
+    {id:'gemini',label:'Dvīņi'},{id:'gift',label:'Dāvana'},{id:'goals',label:'Mērķi'},{id:'guitar',label:'Ģitāra'},
+    {id:'headphones',label:'Austiņas'},{id:'health',label:'Veselība'},{id:'helicopter',label:'Helikopters'},{id:'home',label:'Māja'},
+    {id:'hotair',label:'Gaisa balons'},{id:'hourglass',label:'Smilšu pulkstenis'},{id:'idea',label:'Ideja'},{id:'key',label:'Atslēga'},
+    {id:'learn',label:'Mācības'},{id:'lightning',label:'Zibens'},{id:'lock',label:'Privāts'},{id:'love',label:'Mīlestība'},
+    {id:'magnifier',label:'Lupa'},{id:'map',label:'Karte'},{id:'mic',label:'Mikrofons'},{id:'mind',label:'Prāts'},
+    {id:'money',label:'Nauda'},{id:'moon',label:'Miegs'},{id:'mountain',label:'Kalns'},{id:'mtb',label:'Kalnu ritenis'},
+    {id:'music',label:'Mūzika'},{id:'nature',label:'Daba'},{id:'notes',label:'Piezīmes'},{id:'owl',label:'Pūce'},
+    {id:'palette',label:'Palete'},{id:'party',label:'Ballīte'},{id:'people',label:'Cilvēki'},{id:'pet',label:'Mīlulis'},
+    {id:'phoenix',label:'Fēnikss'},{id:'phone',label:'Tel'},{id:'piano',label:'Klavieres'},{id:'pizza',label:'Pica'},
+    {id:'polaroid',label:'Polaroid'},{id:'potion',label:'Eliksīrs'},{id:'puzzle',label:'Puzle'},{id:'robot',label:'Robots'},
+    {id:'rocket',label:'Projekti'},{id:'satellite',label:'Satelīts'},{id:'shield',label:'Vairogs'},{id:'ship',label:'Kuģis'},
+    {id:'shop',label:'Iepirkumi'},{id:'skate',label:'Skeitbords'},{id:'snowflake',label:'Sniegpārsla'},{id:'speed',label:'Ātrums'},
+    {id:'star',label:'Favorīti'},{id:'submarine',label:'Zemūdene'},{id:'sun',label:'Saule'},{id:'surf',label:'Sērfings'},
     {id:'sword',label:'Zobens'},{id:'telescope',label:'Teleskops'},{id:'tent',label:'Telts'},{id:'tools',label:'Rīki'},
     {id:'train',label:'Vilciens'},{id:'travel',label:'Ceļojumi'},{id:'tree',label:'Koks'},{id:'trophy',label:'Sasniegumi'},
-    {id:'umbrella',label:'Lietussargs'},{id:'water',label:'Ūdens'},{id:'window',label:'Logs'},{id:'work',label:'Darbs'},
+    {id:'ufo',label:'NLO'},{id:'umbrella',label:'Lietussargs'},{id:'unicorn',label:'Vienradzis'},{id:'water',label:'Ūdens'},
+    {id:'window',label:'Logs'},{id:'wolf',label:'Vilks'},{id:'work',label:'Darbs'},{id:'yoga',label:'Joga'},
   ];
   var CLASSIC_EMOJIS = [
     '📝','📄','📋','📌','📎','📁','📂','🗂️',

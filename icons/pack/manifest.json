@@ -1,7 +1,7 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Konteksta Logs Emoji Pack",
-  "count": 88,
+  "count": 108,
   "icons": [
     {
       "id": "ai",
@@ -17,6 +17,11 @@
       "id": "archive",
       "label": "Arhīvs",
       "file": "icons/pack/archive.png"
+    },
+    {
+      "id": "atom",
+      "label": "Atoms",
+      "file": "icons/pack/atom.png"
     },
     {
       "id": "balloon",
@@ -84,6 +89,11 @@
       "file": "icons/pack/chat.png"
     },
     {
+      "id": "chess",
+      "label": "Šahs",
+      "file": "icons/pack/chess.png"
+    },
+    {
       "id": "clock",
       "label": "Laiks",
       "file": "icons/pack/clock.png"
@@ -129,6 +139,16 @@
       "file": "icons/pack/dice.png"
     },
     {
+      "id": "dna",
+      "label": "DNS",
+      "file": "icons/pack/dna.png"
+    },
+    {
+      "id": "dragon",
+      "label": "Pūķis",
+      "file": "icons/pack/dragon.png"
+    },
+    {
       "id": "family",
       "label": "Ģimene",
       "file": "icons/pack/family.png"
@@ -154,6 +174,11 @@
       "file": "icons/pack/fitness.png"
     },
     {
+      "id": "flask",
+      "label": "Kolba",
+      "file": "icons/pack/flask.png"
+    },
+    {
       "id": "flower",
       "label": "Zieds",
       "file": "icons/pack/flower.png"
@@ -169,9 +194,19 @@
       "file": "icons/pack/football.png"
     },
     {
+      "id": "fox",
+      "label": "Lapsa",
+      "file": "icons/pack/fox.png"
+    },
+    {
       "id": "game",
       "label": "Spēles",
       "file": "icons/pack/game.png"
+    },
+    {
+      "id": "gemini",
+      "label": "Dvīņi",
+      "file": "icons/pack/gemini.png"
     },
     {
       "id": "gift",
@@ -199,9 +234,19 @@
       "file": "icons/pack/health.png"
     },
     {
+      "id": "helicopter",
+      "label": "Helikopters",
+      "file": "icons/pack/helicopter.png"
+    },
+    {
       "id": "home",
       "label": "Māja",
       "file": "icons/pack/home.png"
+    },
+    {
+      "id": "hotair",
+      "label": "Gaisa balons",
+      "file": "icons/pack/hotair.png"
     },
     {
       "id": "hourglass",
@@ -274,6 +319,11 @@
       "file": "icons/pack/mountain.png"
     },
     {
+      "id": "mtb",
+      "label": "Kalnu ritenis",
+      "file": "icons/pack/mtb.png"
+    },
+    {
       "id": "music",
       "label": "Mūzika",
       "file": "icons/pack/music.png"
@@ -287,6 +337,11 @@
       "id": "notes",
       "label": "Piezīmes",
       "file": "icons/pack/notes.png"
+    },
+    {
+      "id": "owl",
+      "label": "Pūce",
+      "file": "icons/pack/owl.png"
     },
     {
       "id": "palette",
@@ -307,6 +362,11 @@
       "id": "pet",
       "label": "Mīlulis",
       "file": "icons/pack/pet.png"
+    },
+    {
+      "id": "phoenix",
+      "label": "Fēnikss",
+      "file": "icons/pack/phoenix.png"
     },
     {
       "id": "phone",
@@ -334,6 +394,11 @@
       "file": "icons/pack/potion.png"
     },
     {
+      "id": "puzzle",
+      "label": "Puzle",
+      "file": "icons/pack/puzzle.png"
+    },
+    {
       "id": "robot",
       "label": "Robots",
       "file": "icons/pack/robot.png"
@@ -344,9 +409,19 @@
       "file": "icons/pack/rocket.png"
     },
     {
+      "id": "satellite",
+      "label": "Satelīts",
+      "file": "icons/pack/satellite.png"
+    },
+    {
       "id": "shield",
       "label": "Vairogs",
       "file": "icons/pack/shield.png"
+    },
+    {
+      "id": "ship",
+      "label": "Kuģis",
+      "file": "icons/pack/ship.png"
     },
     {
       "id": "shop",
@@ -372,6 +447,11 @@
       "id": "star",
       "label": "Favorīti",
       "file": "icons/pack/star.png"
+    },
+    {
+      "id": "submarine",
+      "label": "Zemūdene",
+      "file": "icons/pack/submarine.png"
     },
     {
       "id": "sun",
@@ -424,9 +504,19 @@
       "file": "icons/pack/trophy.png"
     },
     {
+      "id": "ufo",
+      "label": "NLO",
+      "file": "icons/pack/ufo.png"
+    },
+    {
       "id": "umbrella",
       "label": "Lietussargs",
       "file": "icons/pack/umbrella.png"
+    },
+    {
+      "id": "unicorn",
+      "label": "Vienradzis",
+      "file": "icons/pack/unicorn.png"
     },
     {
       "id": "water",
@@ -439,9 +529,19 @@
       "file": "icons/pack/window.png"
     },
     {
+      "id": "wolf",
+      "label": "Vilks",
+      "file": "icons/pack/wolf.png"
+    },
+    {
       "id": "work",
       "label": "Darbs",
       "file": "icons/pack/work.png"
+    },
+    {
+      "id": "yoga",
+      "label": "Joga",
+      "file": "icons/pack/yoga.png"
     }
   ]
 }
