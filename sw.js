@@ -1,5 +1,5 @@
 // Service Worker for Kontekstalogas — offline-first PWA
-const CACHE_NAME = 'kontekstalogas-v1';
+const CACHE_NAME = 'kontekstalogas-v1.6.1';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -7,7 +7,8 @@ const STATIC_ASSETS = [
   './style.css',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './icons/pack/manifest.json'
 ];
 
 // Install: cache all static assets

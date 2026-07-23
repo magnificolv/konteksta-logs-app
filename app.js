@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.5.4';
+  var APP_VERSION = '1.6.1';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -18,6 +18,101 @@
   var GH_BRANCH = 'master';
   var GH_RAW_URL = 'https://raw.githubusercontent.com/' + GH_OWNER + '/' + GH_REPO + '/' + GH_BRANCH + '/data.json';
   var GH_PROXY_URL = 'https://kontekstalogas-gh-proxy.magnificox.workers.dev';
+
+  /* ─── Icon Pack (Grok Imagine emoji replacements) ─────────────── */
+  var ICON_PACK = [
+    {id:'ai',label:'AI'},{id:'anchor',label:'Enkurs'},{id:'archive',label:'Arhīvs'},{id:'battery',label:'Enerģija'},
+    {id:'bike',label:'Velosipēds'},{id:'calendar',label:'Kalendārs'},{id:'camera',label:'Media'},{id:'castle',label:'Pils'},
+    {id:'chat',label:'Čats'},{id:'clock',label:'Laiks'},{id:'code',label:'Kods'},{id:'coffee',label:'Kafija'},
+    {id:'diamond',label:'Dimants'},{id:'dice',label:'Kauliņi'},{id:'family',label:'Ģimene'},{id:'film',label:'Filmas'},
+    {id:'fire',label:'Uguns'},{id:'fitness',label:'Sports'},{id:'food',label:'Ēdiens'},{id:'game',label:'Spēles'},
+    {id:'gift',label:'Dāvana'},{id:'goals',label:'Mērķi'},{id:'headphones',label:'Austiņas'},{id:'health',label:'Veselība'},
+    {id:'home',label:'Māja'},{id:'idea',label:'Ideja'},{id:'key',label:'Atslēga'},{id:'learn',label:'Mācības'},
+    {id:'lightning',label:'Zibens'},{id:'lock',label:'Privāts'},{id:'love',label:'Mīlestība'},{id:'map',label:'Karte'},
+    {id:'mind',label:'Prāts'},{id:'money',label:'Nauda'},{id:'moon',label:'Miegs'},{id:'mountain',label:'Kalns'},
+    {id:'music',label:'Mūzika'},{id:'nature',label:'Daba'},{id:'notes',label:'Piezīmes'},{id:'party',label:'Ballīte'},
+    {id:'people',label:'Cilvēki'},{id:'pet',label:'Mīlulis'},{id:'phone',label:'Tel'},{id:'pizza',label:'Pica'},
+    {id:'robot',label:'Robots'},{id:'rocket',label:'Projekti'},{id:'shop',label:'Iepirkumi'},{id:'speed',label:'Ātrums'},
+    {id:'star',label:'Favorīti'},{id:'sun',label:'Saule'},{id:'tools',label:'Rīki'},{id:'train',label:'Vilciens'},
+    {id:'travel',label:'Ceļojumi'},{id:'trophy',label:'Sasniegumi'},{id:'umbrella',label:'Lietussargs'},{id:'water',label:'Ūdens'},
+    {id:'window',label:'Logs'},{id:'work',label:'Darbs'},
+  ];
+  var CLASSIC_EMOJIS = [
+    '📝','📄','📋','📌','📎','📁','📂','🗂️',
+    '📅','📆','⏰','🔔','🔒','🔓','🔑','🔧',
+    '💡','💭','💬','🗨️','💼','📊','📈','📉',
+    '🎯','🎨','🎬','🎮','🎲','🎭','🎪','🎤',
+    '🏠','🏢','🏫','🏥','🏦','🏪','🏗️','🏔️',
+    '❤️','💙','💚','💛','💜','🧡','🖤','🤍',
+    '⭐','🌟','✨','🔥','💧','🌈','🌍','🌱',
+    '🚀','✈️','🚗','🚲','🚢','🚃','🛸','🛵',
+    '👤','👥','🤝','👨‍👩‍👧‍👦','💑','🎉','🎊','🏆'
+  ];
+  var _iconPickerMode = 'modern'; // modern | emoji
+
+  function isPackIcon(icon) {
+    return typeof icon === 'string' && icon.indexOf('pack:') === 0;
+  }
+
+  function packIconPath(icon) {
+    return 'icons/pack/' + String(icon).slice(5) + '.png';
+  }
+
+  function packIconLabel(icon) {
+    if (!isPackIcon(icon)) return '';
+    var id = String(icon).slice(5);
+    for (var i = 0; i < ICON_PACK.length; i++) {
+      if (ICON_PACK[i].id === id) return ICON_PACK[i].label;
+    }
+    return id;
+  }
+
+  /** HTML for tab cards / titles. Safe escaped. */
+  function renderIconHtml(icon) {
+    var ic = icon || '📄';
+    if (isPackIcon(ic)) {
+      return '<img class="pack-icon" src="' + escAttr(packIconPath(ic)) + '" alt="' + escAttr(packIconLabel(ic) || 'icon') + '" draggable="false">';
+    }
+    return escHtml(ic);
+  }
+
+  /** Plain fallback for markdown headings (no pack: ids in text). */
+  function iconForMarkdown(icon) {
+    if (isPackIcon(icon)) return '✨';
+    return icon || '📄';
+  }
+
+  function setIconPreview(icon) {
+    var preview = document.getElementById('emojiPreview');
+    if (!preview) return;
+    preview.innerHTML = renderIconHtml(icon || '📝');
+  }
+
+  function clearIconPickerSelection() {
+    var root = document.getElementById('emojiPicker');
+    if (!root) return;
+    root.querySelectorAll('.emoji-picker-btn').forEach(function(b) {
+      b.classList.remove('selected');
+    });
+  }
+
+  function highlightIconInPicker(icon) {
+    clearIconPickerSelection();
+    if (!icon) return;
+    var root = document.getElementById('emojiPicker');
+    if (!root) return;
+    root.querySelectorAll('.emoji-picker-btn').forEach(function(b) {
+      if (b.getAttribute('data-icon') === icon) b.classList.add('selected');
+    });
+  }
+
+  function applyIconSelection(value) {
+    var iconInput = document.getElementById('editIcon');
+    if (iconInput) iconInput.value = value;
+    setIconPreview(value);
+    highlightIconInPicker(value);
+  }
+
   var _apiAvailable = null; // null = nav pārbaudīts, true/false
   var _saveTimer = null;    // debounce priekš servera saglabāšanas
 
@@ -244,7 +339,6 @@
       var noImgClass = hasImage ? '' : ' no-image';
       var color = escAttr(tab.color || '#6366f1');
       var id = escAttr(tab.id);
-      var icon = escHtml(tab.icon || '📄');
       var name = escHtml(tab.name || 'Untitled');
       var imgHtml = '';
       if (hasImage) {
@@ -252,7 +346,7 @@
       }
       return '<div class="tab-card' + noImgClass + '" style="--tab-color: ' + color + '" onclick="app.openTab(\'' + id + '\')" data-tab-id="' + id + '" data-tab-index="' + index + '" draggable="true">' +
         '<div class="tab-card-header">' +
-          '<div class="tab-card-icon">' + icon + '</div>' +
+          '<div class="tab-card-icon">' + renderIconHtml(tab.icon || '📄') + '</div>' +
           '<div class="tab-card-title">' + name + '</div>' +
         '</div>' +
         imgHtml +
@@ -604,7 +698,7 @@
     panel.setAttribute('data-current-tab', currentTabId);
 
     var titleEl = document.getElementById('expandedTitle');
-    if (titleEl) titleEl.textContent = (tab.icon || '📄') + ' ' + (tab.name || '');
+    if (titleEl) titleEl.innerHTML = renderIconHtml(tab.icon || '📄') + ' <span class="expanded-title-text">' + escHtml(tab.name || '') + '</span>';
 
     var updatedEl = document.getElementById('expandedUpdated');
     if (updatedEl) updatedEl.textContent = 'Atjaunināts: ' + formatDate(tab.updated);
@@ -1247,8 +1341,7 @@
     var iconInput = document.getElementById('editIcon');
     if (iconInput) iconInput.value = '📝';
 
-    var preview = document.getElementById('emojiPreview');
-    if (preview) preview.textContent = '📝';
+    setIconPreview('📝');
 
     var colorInput = document.getElementById('editColor');
     if (colorInput) colorInput.value = '#6366f1';
@@ -1262,9 +1355,11 @@
     var bgPreview = document.getElementById('editBgPreview');
     if (bgPreview) { bgPreview.src = ''; bgPreview.style.display = 'none'; }
 
-    // Reset emoji picker selection
-    var emojiBtns = document.querySelectorAll('#emojiPicker .emoji-picker-btn');
-    emojiBtns.forEach(function(b) { b.classList.remove('selected'); });
+    // Reset icon picker selection
+    clearIconPickerSelection();
+    // Default tab: modern pack
+    _iconPickerMode = 'modern';
+    renderIconPickerGrid();
 
     var saveBtn = document.getElementById('modalSaveBtn');
     if (saveBtn) saveBtn.textContent = 'Izveidot';
@@ -1295,8 +1390,7 @@
     var iconInput = document.getElementById('editIcon');
     if (iconInput) iconInput.value = tab.icon || '📝';
 
-    var preview = document.getElementById('emojiPreview');
-    if (preview) preview.textContent = tab.icon || '📝';
+    setIconPreview(tab.icon || '📝');
 
     var colorInput = document.getElementById('editColor');
     if (colorInput) colorInput.value = tab.color || '#6366f1';
@@ -1318,14 +1412,14 @@
       }
     }
 
-    // Highlight selected emoji in picker
-    var emojiBtns = document.querySelectorAll('#emojiPicker .emoji-picker-btn');
-    emojiBtns.forEach(function(b) { b.classList.remove('selected'); });
-    if (tab.icon) {
-      emojiBtns.forEach(function(b) {
-        if (b.textContent === tab.icon) b.classList.add('selected');
-      });
-    }
+    // Switch picker mode based on current icon type
+    _iconPickerMode = isPackIcon(tab.icon) ? 'modern' : 'emoji';
+    renderIconPickerGrid();
+    highlightIconInPicker(tab.icon || '📝');
+    // Sync tab buttons UI
+    document.querySelectorAll('.icon-picker-tab').forEach(function(t) {
+      t.classList.toggle('active', t.getAttribute('data-tab') === _iconPickerMode);
+    });
 
     var saveBtn = document.getElementById('modalSaveBtn');
     if (saveBtn) saveBtn.textContent = 'Saglabāt';
@@ -1351,9 +1445,9 @@
       return;
     }
 
-    // If emoji picker has a selected item, use that
-    var selectedEmoji = document.querySelector('#emojiPicker .emoji-picker-btn.selected');
-    if (selectedEmoji) icon = selectedEmoji.textContent;
+    // If icon picker has a selected item, use that (pack:id or emoji)
+    var selectedIcon = document.querySelector('#emojiPicker .emoji-picker-btn.selected');
+    if (selectedIcon) icon = selectedIcon.getAttribute('data-icon') || selectedIcon.textContent;
 
     // _tempBgImage overrides editBgImage if set (from file upload)
     var image = _tempBgImage !== null ? _tempBgImage : bgValue;
@@ -1374,7 +1468,7 @@
         color: color,
         image: image || '',
         description: description,
-        summary: '# ' + icon + ' ' + name + '\n\n'
+        summary: '# ' + iconForMarkdown(icon) + ' ' + name + '\n\n'
       });
     }
 
@@ -1389,58 +1483,60 @@
     _tempBgImage = null;
   };
 
-  /* ─── Emoji Picker ─────────────────────────────────────────────── */
+  /* ─── Icon Picker (Modern pack + classic emoji) ─────────────────── */
 
-  function initEmojiPicker() {
+  function renderIconPickerGrid() {
     var container = document.getElementById('emojiPicker');
     if (!container) return;
 
-    var emojis = [
-      '📝', '📄', '📋', '📌', '📎', '📁', '📂', '🗂️',
-      '📅', '📆', '⏰', '🔔', '🔒', '🔓', '🔑', '🔧',
-      '💡', '💭', '💬', '🗨️', '💼', '📊', '📈', '📉',
-      '🎯', '🎨', '🎬', '🎮', '🎲', '🎭', '🎪', '🎤',
-      '🏠', '🏢', '🏫', '🏥', '🏦', '🏪', '🏗️', '🏔️',
-      '❤️', '💙', '💚', '💛', '💜', '🧡', '🖤', '🤍',
-      '⭐', '🌟', '✨', '🔥', '💧', '🌈', '🌍', '🌱',
-      '🚀', '✈️', '🚗', '🚲', '🚢', '🚃', '🛸', '🛵',
-      '👤', '👥', '🤝', '👨‍👩‍👧‍👦', '💑', '🎉', '🎊', '🏆'
-    ];
+    // Sync mode tabs
+    document.querySelectorAll('.icon-picker-tab').forEach(function(t) {
+      t.classList.toggle('active', t.getAttribute('data-tab') === _iconPickerMode);
+    });
 
-    container.innerHTML = emojis.map(function(e) {
-      return '<button class="emoji-picker-btn" type="button" data-emoji="' + escAttr(e) + '">' + escHtml(e) + '</button>';
-    }).join('');
+    var html = '';
+    if (_iconPickerMode === 'modern') {
+      html = ICON_PACK.map(function(item) {
+        var val = 'pack:' + item.id;
+        return '<button class="emoji-picker-btn pack-picker-btn" type="button" data-icon="' + escAttr(val) + '" title="' + escAttr(item.label) + '">' +
+          '<img class="pack-icon" src="icons/pack/' + escAttr(item.id) + '.png" alt="' + escAttr(item.label) + '" draggable="false">' +
+          '</button>';
+      }).join('');
+    } else {
+      html = CLASSIC_EMOJIS.map(function(e) {
+        return '<button class="emoji-picker-btn" type="button" data-icon="' + escAttr(e) + '">' + escHtml(e) + '</button>';
+      }).join('');
+    }
+    container.innerHTML = html;
+
+    // Restore selection highlight from input
+    var iconInput = document.getElementById('editIcon');
+    var current = iconInput ? iconInput.value.trim() : '';
+    if (current) highlightIconInPicker(current);
 
     container.querySelectorAll('.emoji-picker-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        container.querySelectorAll('.emoji-picker-btn').forEach(function(b) {
-          b.classList.remove('selected');
-        });
-        btn.classList.add('selected');
-        var preview = document.getElementById('emojiPreview');
-        if (preview) preview.textContent = btn.textContent;
-        var iconInput = document.getElementById('editIcon');
-        if (iconInput) iconInput.value = btn.textContent;
+        var val = btn.getAttribute('data-icon') || btn.textContent;
+        applyIconSelection(val);
       });
     });
   }
 
+  function initEmojiPicker() {
+    // Mode tabs
+    document.querySelectorAll('.icon-picker-tab').forEach(function(tabBtn) {
+      tabBtn.addEventListener('click', function() {
+        _iconPickerMode = tabBtn.getAttribute('data-tab') || 'modern';
+        renderIconPickerGrid();
+      });
+    });
+    _iconPickerMode = 'modern';
+    renderIconPickerGrid();
+  }
+
   /* Public wrapper for HTML onclick */
   app.selectEmoji = function(emoji) {
-    var container = document.getElementById('emojiPicker');
-    if (!container) return;
-    var btns = container.querySelectorAll('.emoji-picker-btn');
-    btns.forEach(function(b) { b.classList.remove('selected'); });
-    btns.forEach(function(b) {
-      if (b.textContent === emoji) b.classList.add('selected');
-    });
-    var preview = document.getElementById('emojiPreview');
-    if (preview) preview.textContent = emoji;
-  };
-
-  app.selectColor = function(color) {
-    var input = document.getElementById('editColor');
-    if (input) input.value = color;
+    applyIconSelection(emoji);
   };
 
   /* ─── Image Management ─────────────────────────────────────────── */
@@ -1772,8 +1868,8 @@
     var iconInput = document.getElementById('editIcon');
     if (iconInput) {
       iconInput.addEventListener('input', function() {
-        var preview = document.getElementById('emojiPreview');
-        if (preview) preview.textContent = this.value || '📝';
+        setIconPreview(this.value || '📝');
+        highlightIconInPicker(this.value || '');
       });
     }
 
@@ -1857,40 +1953,8 @@
     var addTabBtn = document.getElementById('addTabBtn');
     if (addTabBtn) addTabBtn.addEventListener('click', function() { app.showCreateModal(); });
 
-    // Push button — telefona dati → GitHub
-    var pushBtn = document.getElementById('pushBtn');
-    if (pushBtn) {
-      pushBtn.addEventListener('click', function() {
-        pushBtn.textContent = '⏳ Push...';
-        pushBtn.disabled = true;
-
-        var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-        if (isLocal) {
-          // PC: git pull + push caur serveri
-          fetch('/api/sync', { method: 'POST' })
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-              if (data.pushed) {
-                pushBtn.textContent = '✅ Push OK';
-                setTimeout(function() { pushBtn.textContent = '☁️ Push'; pushBtn.disabled = false; }, 3000);
-              } else {
-                pushBtn.textContent = '⚠️ ' + (data.message || 'Neizdevās');
-                setTimeout(function() { pushBtn.textContent = '☁️ Push'; pushBtn.disabled = false; }, 3000);
-              }
-            })
-            .catch(function() {
-              pushBtn.textContent = '❌ Kļūda';
-              setTimeout(function() { pushBtn.textContent = '☁️ Push'; pushBtn.disabled = false; }, 3000);
-            });
-        } else {
-          // Telefons: push caur Worker
-          app.pushPhoneData(function(result) {
-            pushBtn.textContent = result.icon + ' ' + result.msg;
-            setTimeout(function() { pushBtn.textContent = '☁️ Push'; pushBtn.disabled = false; }, 3000);
-          });
-        }
-      });
-    }
+    // Push — IZSLĒGTS DEV versijā (source of truth = production app)
+    // Push button event listener noņemts — lieto tikai Pull + Reset no Settings
 
     // ─── Settings Modal ──────────────────────────────────────────
 

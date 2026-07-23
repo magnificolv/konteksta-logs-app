@@ -58,7 +58,6 @@
         <!-- Tab Management -->
         <div class="tab-actions">
             <button class="add-tab-btn" id="addTabBtn">➕ Jauns tabs</button>
-            <button class="add-tab-btn" id="pushBtn" title="Push — saglabāt telefona datus GitHub">☁️ Push</button>
             <button class="add-tab-btn settings-btn" id="settingsBtn" title="Iestatījumi">⚙️</button>
         </div>
 
@@ -139,7 +138,11 @@
                     <label>Ikona</label>
                     <div class="emoji-preview">
                         <div class="emoji-preview-icon" id="emojiPreview">📝</div>
-                        <input type="text" id="editIcon" placeholder="📝" maxlength="4" style="flex:1">
+                        <input type="text" id="editIcon" placeholder="📝 vai pack:work" maxlength="40" style="flex:1" autocomplete="off">
+                    </div>
+                    <div class="icon-picker-tabs" role="tablist">
+                        <button type="button" class="icon-picker-tab active" data-tab="modern">✨ Modernās (58)</button>
+                        <button type="button" class="icon-picker-tab" data-tab="emoji">😀 Klasiskās emoji</button>
                     </div>
                     <div class="emoji-picker" id="emojiPicker"></div>
 

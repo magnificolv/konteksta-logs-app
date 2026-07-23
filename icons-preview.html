@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+<meta charset="UTF-8">
+<title>Icon Pack Preview — Konteksta Logs v1.6.1</title>
+<style>
+  body { margin:0; background:#09090f; color:#e2e8f0; font-family:system-ui,sans-serif; padding:24px; }
+  h1 { font-size:1.4rem; margin:0 0 8px; }
+  p { color:#94a3b8; margin:0 0 20px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:12px; }
+  .card { background:#12122c; border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:10px; text-align:center; }
+  .card img { width:72px; height:72px; object-fit:cover; border-radius:12px; display:block; margin:0 auto 8px; }
+  .card span { font-size:11px; color:#b4bfd6; }
+</style>
+</head>
+<body>
+  <h1>✨ Konteksta Logs — Modern icon pack (50)</h1>
+  <p>Grok Imagine · v1.6.1 · emoji replacements</p>
+  <div class="grid" id="g"></div>
+  <script>
+  const ids = ["ai", "anchor", "archive", "battery", "bike", "calendar", "camera", "castle", "chat", "clock", "code", "coffee", "diamond", "dice", "family", "film", "fire", "fitness", "food", "game", "gift", "goals", "headphones", "health", "home", "idea", "key", "learn", "lightning", "lock", "love", "map", "mind", "money", "moon", "mountain", "music", "nature", "notes", "party", "people", "pet", "phone", "pizza", "robot", "rocket", "shop", "speed", "star", "sun", "tools", "train", "travel", "trophy", "umbrella", "water", "window", "work"];
+  const labels = {"ai": "AI", "anchor": "Enkurs", "archive": "Arhīvs", "battery": "Enerģija", "bike": "Velosipēds", "calendar": "Kalendārs", "camera": "Media", "castle": "Pils", "chat": "Čats", "clock": "Laiks", "code": "Kods", "coffee": "Kafija", "diamond": "Dimants", "dice": "Kauliņi", "family": "Ģimene", "film": "Filmas", "fire": "Uguns", "fitness": "Sports", "food": "Ēdiens", "game": "Spēles", "gift": "Dāvana", "goals": "Mērķi", "headphones": "Austiņas", "health": "Veselība", "home": "Māja", "idea": "Ideja", "key": "Atslēga", "learn": "Mācības", "lightning": "Zibens", "lock": "Privāts", "love": "Mīlestība", "map": "Karte", "mind": "Prāts", "money": "Nauda", "moon": "Miegs", "mountain": "Kalns", "music": "Mūzika", "nature": "Daba", "notes": "Piezīmes", "party": "Ballīte", "people": "Cilvēki", "pet": "Mīlulis", "phone": "Tel", "pizza": "Pica", "robot": "Robots", "rocket": "Projekti", "shop": "Iepirkumi", "speed": "Ātrums", "star": "Favorīti", "sun": "Saule", "tools": "Rīki", "train": "Vilciens", "travel": "Ceļojumi", "trophy": "Sasniegumi", "umbrella": "Lietussargs", "water": "Ūdens", "window": "Logs", "work": "Darbs"};
+  document.getElementById('g').innerHTML = ids.map(id =>
+    `<div class="card"><img src="icons/pack/${id}.png" alt="${id}"><span>${labels[id]||id}</span></div>`
+  ).join('');
+  </script>
+</body>
+</html>

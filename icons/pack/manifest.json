@@ -1,0 +1,297 @@
+{
+  "version": 2,
+  "name": "Konteksta Logs Emoji Pack",
+  "count": 58,
+  "icons": [
+    {
+      "id": "ai",
+      "label": "AI",
+      "file": "icons/pack/ai.png"
+    },
+    {
+      "id": "anchor",
+      "label": "Enkurs",
+      "file": "icons/pack/anchor.png"
+    },
+    {
+      "id": "archive",
+      "label": "Arhīvs",
+      "file": "icons/pack/archive.png"
+    },
+    {
+      "id": "battery",
+      "label": "Enerģija",
+      "file": "icons/pack/battery.png"
+    },
+    {
+      "id": "bike",
+      "label": "Velosipēds",
+      "file": "icons/pack/bike.png"
+    },
+    {
+      "id": "calendar",
+      "label": "Kalendārs",
+      "file": "icons/pack/calendar.png"
+    },
+    {
+      "id": "camera",
+      "label": "Media",
+      "file": "icons/pack/camera.png"
+    },
+    {
+      "id": "castle",
+      "label": "Pils",
+      "file": "icons/pack/castle.png"
+    },
+    {
+      "id": "chat",
+      "label": "Čats",
+      "file": "icons/pack/chat.png"
+    },
+    {
+      "id": "clock",
+      "label": "Laiks",
+      "file": "icons/pack/clock.png"
+    },
+    {
+      "id": "code",
+      "label": "Kods",
+      "file": "icons/pack/code.png"
+    },
+    {
+      "id": "coffee",
+      "label": "Kafija",
+      "file": "icons/pack/coffee.png"
+    },
+    {
+      "id": "diamond",
+      "label": "Dimants",
+      "file": "icons/pack/diamond.png"
+    },
+    {
+      "id": "dice",
+      "label": "Kauliņi",
+      "file": "icons/pack/dice.png"
+    },
+    {
+      "id": "family",
+      "label": "Ģimene",
+      "file": "icons/pack/family.png"
+    },
+    {
+      "id": "film",
+      "label": "Filmas",
+      "file": "icons/pack/film.png"
+    },
+    {
+      "id": "fire",
+      "label": "Uguns",
+      "file": "icons/pack/fire.png"
+    },
+    {
+      "id": "fitness",
+      "label": "Sports",
+      "file": "icons/pack/fitness.png"
+    },
+    {
+      "id": "food",
+      "label": "Ēdiens",
+      "file": "icons/pack/food.png"
+    },
+    {
+      "id": "game",
+      "label": "Spēles",
+      "file": "icons/pack/game.png"
+    },
+    {
+      "id": "gift",
+      "label": "Dāvana",
+      "file": "icons/pack/gift.png"
+    },
+    {
+      "id": "goals",
+      "label": "Mērķi",
+      "file": "icons/pack/goals.png"
+    },
+    {
+      "id": "headphones",
+      "label": "Austiņas",
+      "file": "icons/pack/headphones.png"
+    },
+    {
+      "id": "health",
+      "label": "Veselība",
+      "file": "icons/pack/health.png"
+    },
+    {
+      "id": "home",
+      "label": "Māja",
+      "file": "icons/pack/home.png"
+    },
+    {
+      "id": "idea",
+      "label": "Ideja",
+      "file": "icons/pack/idea.png"
+    },
+    {
+      "id": "key",
+      "label": "Atslēga",
+      "file": "icons/pack/key.png"
+    },
+    {
+      "id": "learn",
+      "label": "Mācības",
+      "file": "icons/pack/learn.png"
+    },
+    {
+      "id": "lightning",
+      "label": "Zibens",
+      "file": "icons/pack/lightning.png"
+    },
+    {
+      "id": "lock",
+      "label": "Privāts",
+      "file": "icons/pack/lock.png"
+    },
+    {
+      "id": "love",
+      "label": "Mīlestība",
+      "file": "icons/pack/love.png"
+    },
+    {
+      "id": "map",
+      "label": "Karte",
+      "file": "icons/pack/map.png"
+    },
+    {
+      "id": "mind",
+      "label": "Prāts",
+      "file": "icons/pack/mind.png"
+    },
+    {
+      "id": "money",
+      "label": "Nauda",
+      "file": "icons/pack/money.png"
+    },
+    {
+      "id": "moon",
+      "label": "Miegs",
+      "file": "icons/pack/moon.png"
+    },
+    {
+      "id": "mountain",
+      "label": "Kalns",
+      "file": "icons/pack/mountain.png"
+    },
+    {
+      "id": "music",
+      "label": "Mūzika",
+      "file": "icons/pack/music.png"
+    },
+    {
+      "id": "nature",
+      "label": "Daba",
+      "file": "icons/pack/nature.png"
+    },
+    {
+      "id": "notes",
+      "label": "Piezīmes",
+      "file": "icons/pack/notes.png"
+    },
+    {
+      "id": "party",
+      "label": "Ballīte",
+      "file": "icons/pack/party.png"
+    },
+    {
+      "id": "people",
+      "label": "Cilvēki",
+      "file": "icons/pack/people.png"
+    },
+    {
+      "id": "pet",
+      "label": "Mīlulis",
+      "file": "icons/pack/pet.png"
+    },
+    {
+      "id": "phone",
+      "label": "Tel",
+      "file": "icons/pack/phone.png"
+    },
+    {
+      "id": "pizza",
+      "label": "Pica",
+      "file": "icons/pack/pizza.png"
+    },
+    {
+      "id": "robot",
+      "label": "Robots",
+      "file": "icons/pack/robot.png"
+    },
+    {
+      "id": "rocket",
+      "label": "Projekti",
+      "file": "icons/pack/rocket.png"
+    },
+    {
+      "id": "shop",
+      "label": "Iepirkumi",
+      "file": "icons/pack/shop.png"
+    },
+    {
+      "id": "speed",
+      "label": "Ātrums",
+      "file": "icons/pack/speed.png"
+    },
+    {
+      "id": "star",
+      "label": "Favorīti",
+      "file": "icons/pack/star.png"
+    },
+    {
+      "id": "sun",
+      "label": "Saule",
+      "file": "icons/pack/sun.png"
+    },
+    {
+      "id": "tools",
+      "label": "Rīki",
+      "file": "icons/pack/tools.png"
+    },
+    {
+      "id": "train",
+      "label": "Vilciens",
+      "file": "icons/pack/train.png"
+    },
+    {
+      "id": "travel",
+      "label": "Ceļojumi",
+      "file": "icons/pack/travel.png"
+    },
+    {
+      "id": "trophy",
+      "label": "Sasniegumi",
+      "file": "icons/pack/trophy.png"
+    },
+    {
+      "id": "umbrella",
+      "label": "Lietussargs",
+      "file": "icons/pack/umbrella.png"
+    },
+    {
+      "id": "water",
+      "label": "Ūdens",
+      "file": "icons/pack/water.png"
+    },
+    {
+      "id": "window",
+      "label": "Logs",
+      "file": "icons/pack/window.png"
+    },
+    {
+      "id": "work",
+      "label": "Darbs",
+      "file": "icons/pack/work.png"
+    }
+  ]
+}
