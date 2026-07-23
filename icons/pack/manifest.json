@@ -1,7 +1,7 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Konteksta Logs Emoji Pack",
-  "count": 58,
+  "count": 88,
   "icons": [
     {
       "id": "ai",
@@ -19,6 +19,16 @@
       "file": "icons/pack/archive.png"
     },
     {
+      "id": "balloon",
+      "label": "Balons",
+      "file": "icons/pack/balloon.png"
+    },
+    {
+      "id": "basketball",
+      "label": "Basketbols",
+      "file": "icons/pack/basketball.png"
+    },
+    {
       "id": "battery",
       "label": "Enerģija",
       "file": "icons/pack/battery.png"
@@ -27,6 +37,21 @@
       "id": "bike",
       "label": "Velosipēds",
       "file": "icons/pack/bike.png"
+    },
+    {
+      "id": "books",
+      "label": "Grāmatas",
+      "file": "icons/pack/books.png"
+    },
+    {
+      "id": "brush",
+      "label": "Ota",
+      "file": "icons/pack/brush.png"
+    },
+    {
+      "id": "cake",
+      "label": "Kūka",
+      "file": "icons/pack/cake.png"
     },
     {
       "id": "calendar",
@@ -39,9 +64,19 @@
       "file": "icons/pack/camera.png"
     },
     {
+      "id": "candle",
+      "label": "Svece",
+      "file": "icons/pack/candle.png"
+    },
+    {
       "id": "castle",
       "label": "Pils",
       "file": "icons/pack/castle.png"
+    },
+    {
+      "id": "cat",
+      "label": "Kaķis",
+      "file": "icons/pack/cat.png"
     },
     {
       "id": "chat",
@@ -54,6 +89,11 @@
       "file": "icons/pack/clock.png"
     },
     {
+      "id": "cloud",
+      "label": "Mākonis",
+      "file": "icons/pack/cloud.png"
+    },
+    {
       "id": "code",
       "label": "Kods",
       "file": "icons/pack/code.png"
@@ -62,6 +102,21 @@
       "id": "coffee",
       "label": "Kafija",
       "file": "icons/pack/coffee.png"
+    },
+    {
+      "id": "compass",
+      "label": "Kompass",
+      "file": "icons/pack/compass.png"
+    },
+    {
+      "id": "crown",
+      "label": "Kronis",
+      "file": "icons/pack/crown.png"
+    },
+    {
+      "id": "crystalball",
+      "label": "Kristāla bumba",
+      "file": "icons/pack/crystalball.png"
     },
     {
       "id": "diamond",
@@ -89,14 +144,29 @@
       "file": "icons/pack/fire.png"
     },
     {
+      "id": "fish",
+      "label": "Zivs",
+      "file": "icons/pack/fish.png"
+    },
+    {
       "id": "fitness",
       "label": "Sports",
       "file": "icons/pack/fitness.png"
     },
     {
+      "id": "flower",
+      "label": "Zieds",
+      "file": "icons/pack/flower.png"
+    },
+    {
       "id": "food",
       "label": "Ēdiens",
       "file": "icons/pack/food.png"
+    },
+    {
+      "id": "football",
+      "label": "Futbols",
+      "file": "icons/pack/football.png"
     },
     {
       "id": "game",
@@ -114,6 +184,11 @@
       "file": "icons/pack/goals.png"
     },
     {
+      "id": "guitar",
+      "label": "Ģitāra",
+      "file": "icons/pack/guitar.png"
+    },
+    {
       "id": "headphones",
       "label": "Austiņas",
       "file": "icons/pack/headphones.png"
@@ -127,6 +202,11 @@
       "id": "home",
       "label": "Māja",
       "file": "icons/pack/home.png"
+    },
+    {
+      "id": "hourglass",
+      "label": "Smilšu pulkstenis",
+      "file": "icons/pack/hourglass.png"
     },
     {
       "id": "idea",
@@ -159,9 +239,19 @@
       "file": "icons/pack/love.png"
     },
     {
+      "id": "magnifier",
+      "label": "Lupa",
+      "file": "icons/pack/magnifier.png"
+    },
+    {
       "id": "map",
       "label": "Karte",
       "file": "icons/pack/map.png"
+    },
+    {
+      "id": "mic",
+      "label": "Mikrofons",
+      "file": "icons/pack/mic.png"
     },
     {
       "id": "mind",
@@ -199,6 +289,11 @@
       "file": "icons/pack/notes.png"
     },
     {
+      "id": "palette",
+      "label": "Palete",
+      "file": "icons/pack/palette.png"
+    },
+    {
       "id": "party",
       "label": "Ballīte",
       "file": "icons/pack/party.png"
@@ -219,9 +314,24 @@
       "file": "icons/pack/phone.png"
     },
     {
+      "id": "piano",
+      "label": "Klavieres",
+      "file": "icons/pack/piano.png"
+    },
+    {
       "id": "pizza",
       "label": "Pica",
       "file": "icons/pack/pizza.png"
+    },
+    {
+      "id": "polaroid",
+      "label": "Polaroid",
+      "file": "icons/pack/polaroid.png"
+    },
+    {
+      "id": "potion",
+      "label": "Eliksīrs",
+      "file": "icons/pack/potion.png"
     },
     {
       "id": "robot",
@@ -234,9 +344,24 @@
       "file": "icons/pack/rocket.png"
     },
     {
+      "id": "shield",
+      "label": "Vairogs",
+      "file": "icons/pack/shield.png"
+    },
+    {
       "id": "shop",
       "label": "Iepirkumi",
       "file": "icons/pack/shop.png"
+    },
+    {
+      "id": "skate",
+      "label": "Skeitbords",
+      "file": "icons/pack/skate.png"
+    },
+    {
+      "id": "snowflake",
+      "label": "Sniegpārsla",
+      "file": "icons/pack/snowflake.png"
     },
     {
       "id": "speed",
@@ -254,6 +379,26 @@
       "file": "icons/pack/sun.png"
     },
     {
+      "id": "surf",
+      "label": "Sērfings",
+      "file": "icons/pack/surf.png"
+    },
+    {
+      "id": "sword",
+      "label": "Zobens",
+      "file": "icons/pack/sword.png"
+    },
+    {
+      "id": "telescope",
+      "label": "Teleskops",
+      "file": "icons/pack/telescope.png"
+    },
+    {
+      "id": "tent",
+      "label": "Telts",
+      "file": "icons/pack/tent.png"
+    },
+    {
       "id": "tools",
       "label": "Rīki",
       "file": "icons/pack/tools.png"
@@ -267,6 +412,11 @@
       "id": "travel",
       "label": "Ceļojumi",
       "file": "icons/pack/travel.png"
+    },
+    {
+      "id": "tree",
+      "label": "Koks",
+      "file": "icons/pack/tree.png"
     },
     {
       "id": "trophy",
