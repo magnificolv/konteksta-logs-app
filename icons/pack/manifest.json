@@ -1,7 +1,7 @@
 {
-  "version": 5,
+  "version": 6,
   "name": "Konteksta Logs Emoji Pack (transparent)",
-  "count": 108,
+  "count": 144,
   "icons": [
     {
       "id": "ai",
@@ -24,9 +24,21 @@
       "file": "icons/pack/atom.png"
     },
     {
+      "id": "baby",
+      "label": "Bērns",
+      "file": "icons/pack/baby.png",
+      "tab": "Ģimene"
+    },
+    {
       "id": "balloon",
       "label": "Balons",
       "file": "icons/pack/balloon.png"
+    },
+    {
+      "id": "basket",
+      "label": "Grozs",
+      "file": "icons/pack/basket.png",
+      "tab": "Veikals"
     },
     {
       "id": "basketball",
@@ -49,9 +61,21 @@
       "file": "icons/pack/books.png"
     },
     {
+      "id": "bracelet",
+      "label": "Draudzība",
+      "file": "icons/pack/bracelet.png",
+      "tab": "Draugi"
+    },
+    {
       "id": "brush",
       "label": "Ota",
       "file": "icons/pack/brush.png"
+    },
+    {
+      "id": "caduceus",
+      "label": "Hermes",
+      "file": "icons/pack/caduceus.png",
+      "tab": "Hermes Agent"
     },
     {
       "id": "cake",
@@ -74,6 +98,12 @@
       "file": "icons/pack/candle.png"
     },
     {
+      "id": "cart",
+      "label": "Ratiņi",
+      "file": "icons/pack/cart.png",
+      "tab": "Veikals"
+    },
+    {
       "id": "castle",
       "label": "Pils",
       "file": "icons/pack/castle.png"
@@ -87,6 +117,18 @@
       "id": "chat",
       "label": "Čats",
       "file": "icons/pack/chat.png"
+    },
+    {
+      "id": "checklist",
+      "label": "Saraksts",
+      "file": "icons/pack/checklist.png",
+      "tab": "Dienas uzdevumi"
+    },
+    {
+      "id": "cheers",
+      "label": "Cheers",
+      "file": "icons/pack/cheers.png",
+      "tab": "Draugi"
     },
     {
       "id": "chess",
@@ -117,6 +159,30 @@
       "id": "compass",
       "label": "Kompass",
       "file": "icons/pack/compass.png"
+    },
+    {
+      "id": "conductor",
+      "label": "Konduktors",
+      "file": "icons/pack/conductor.png",
+      "tab": "Darbs"
+    },
+    {
+      "id": "copilot",
+      "label": "Copilot",
+      "file": "icons/pack/copilot.png",
+      "tab": "Hermes Agent"
+    },
+    {
+      "id": "cottage",
+      "label": "Mājiņa",
+      "file": "icons/pack/cottage.png",
+      "tab": "Sabile"
+    },
+    {
+      "id": "creditcard",
+      "label": "Karte",
+      "file": "icons/pack/creditcard.png",
+      "tab": "Finanses"
     },
     {
       "id": "crown",
@@ -219,6 +285,12 @@
       "file": "icons/pack/goals.png"
     },
     {
+      "id": "grapes",
+      "label": "Vīnogas",
+      "file": "icons/pack/grapes.png",
+      "tab": "Sabile"
+    },
+    {
       "id": "guitar",
       "label": "Ģitāra",
       "file": "icons/pack/guitar.png"
@@ -239,6 +311,18 @@
       "file": "icons/pack/helicopter.png"
     },
     {
+      "id": "helmet",
+      "label": "Ķivere",
+      "file": "icons/pack/helmet.png",
+      "tab": "Forza 6"
+    },
+    {
+      "id": "highfive",
+      "label": "High five",
+      "file": "icons/pack/highfive.png",
+      "tab": "Draugi"
+    },
+    {
       "id": "home",
       "label": "Māja",
       "file": "icons/pack/home.png"
@@ -254,14 +338,44 @@
       "file": "icons/pack/hourglass.png"
     },
     {
+      "id": "househeart",
+      "label": "Mājas sirds",
+      "file": "icons/pack/househeart.png",
+      "tab": "Ģimene"
+    },
+    {
       "id": "idea",
       "label": "Ideja",
       "file": "icons/pack/idea.png"
     },
     {
+      "id": "incense",
+      "label": "Vīraks",
+      "file": "icons/pack/incense.png",
+      "tab": "Templis"
+    },
+    {
+      "id": "journal",
+      "label": "Dienasgrāmata",
+      "file": "icons/pack/journal.png",
+      "tab": "Manas piezīmes"
+    },
+    {
+      "id": "kanban",
+      "label": "Kanban",
+      "file": "icons/pack/kanban.png",
+      "tab": "Dienas uzdevumi"
+    },
+    {
       "id": "key",
       "label": "Atslēga",
       "file": "icons/pack/key.png"
+    },
+    {
+      "id": "laptop",
+      "label": "Portatīvais",
+      "file": "icons/pack/laptop.png",
+      "tab": "My tech"
     },
     {
       "id": "learn",
@@ -334,9 +448,21 @@
       "file": "icons/pack/nature.png"
     },
     {
+      "id": "neural",
+      "label": "Neirons",
+      "file": "icons/pack/neural.png",
+      "tab": "Hermes Agent"
+    },
+    {
       "id": "notes",
       "label": "Piezīmes",
       "file": "icons/pack/notes.png"
+    },
+    {
+      "id": "om",
+      "label": "Om",
+      "file": "icons/pack/om.png",
+      "tab": "Templis"
     },
     {
       "id": "owl",
@@ -352,6 +478,12 @@
       "id": "party",
       "label": "Ballīte",
       "file": "icons/pack/party.png"
+    },
+    {
+      "id": "pen",
+      "label": "Pildspalva",
+      "file": "icons/pack/pen.png",
+      "tab": "Manas piezīmes"
     },
     {
       "id": "people",
@@ -379,6 +511,12 @@
       "file": "icons/pack/piano.png"
     },
     {
+      "id": "piggy",
+      "label": "Krājkasīte",
+      "file": "icons/pack/piggy.png",
+      "tab": "Finanses"
+    },
+    {
       "id": "pizza",
       "label": "Pica",
       "file": "icons/pack/pizza.png"
@@ -399,6 +537,36 @@
       "file": "icons/pack/puzzle.png"
     },
     {
+      "id": "racecar",
+      "label": "Sacīkšu auto",
+      "file": "icons/pack/racecar.png",
+      "tab": "Forza 6"
+    },
+    {
+      "id": "railway",
+      "label": "Sliedes",
+      "file": "icons/pack/railway.png",
+      "tab": "Darbs"
+    },
+    {
+      "id": "receipt",
+      "label": "Čeks",
+      "file": "icons/pack/receipt.png",
+      "tab": "Veikals"
+    },
+    {
+      "id": "rings",
+      "label": "Gredzeni",
+      "file": "icons/pack/rings.png",
+      "tab": "Ģimene"
+    },
+    {
+      "id": "river",
+      "label": "Upe",
+      "file": "icons/pack/river.png",
+      "tab": "Sabile"
+    },
+    {
       "id": "robot",
       "label": "Robots",
       "file": "icons/pack/robot.png"
@@ -412,6 +580,12 @@
       "id": "satellite",
       "label": "Satelīts",
       "file": "icons/pack/satellite.png"
+    },
+    {
+      "id": "server",
+      "label": "Serveris",
+      "file": "icons/pack/server.png",
+      "tab": "My tech"
     },
     {
       "id": "shield",
@@ -449,6 +623,18 @@
       "file": "icons/pack/star.png"
     },
     {
+      "id": "steering",
+      "label": "Stūre",
+      "file": "icons/pack/steering.png",
+      "tab": "Forza 6"
+    },
+    {
+      "id": "sticky",
+      "label": "Līmlapiņa",
+      "file": "icons/pack/sticky.png",
+      "tab": "Manas piezīmes"
+    },
+    {
       "id": "submarine",
       "label": "Zemūdene",
       "file": "icons/pack/submarine.png"
@@ -469,14 +655,32 @@
       "file": "icons/pack/sword.png"
     },
     {
+      "id": "target",
+      "label": "Mērķis",
+      "file": "icons/pack/target.png",
+      "tab": "Dienas uzdevumi"
+    },
+    {
       "id": "telescope",
       "label": "Teleskops",
       "file": "icons/pack/telescope.png"
     },
     {
+      "id": "temple",
+      "label": "Templis",
+      "file": "icons/pack/temple.png",
+      "tab": "Templis"
+    },
+    {
       "id": "tent",
       "label": "Telts",
       "file": "icons/pack/tent.png"
+    },
+    {
+      "id": "ticket",
+      "label": "Biļete",
+      "file": "icons/pack/ticket.png",
+      "tab": "Darbs"
     },
     {
       "id": "tools",
@@ -519,9 +723,21 @@
       "file": "icons/pack/unicorn.png"
     },
     {
+      "id": "wallet",
+      "label": "Maks",
+      "file": "icons/pack/wallet.png",
+      "tab": "Finanses"
+    },
+    {
       "id": "water",
       "label": "Ūdens",
       "file": "icons/pack/water.png"
+    },
+    {
+      "id": "wifi",
+      "label": "Wi‑Fi",
+      "file": "icons/pack/wifi.png",
+      "tab": "My tech"
     },
     {
       "id": "window",

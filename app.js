@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.6';
+  var APP_VERSION = '1.6.7';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -48,6 +48,42 @@
     {id:'train',label:'Vilciens'},{id:'travel',label:'Ceļojumi'},{id:'tree',label:'Koks'},{id:'trophy',label:'Sasniegumi'},
     {id:'ufo',label:'NLO'},{id:'umbrella',label:'Lietussargs'},{id:'unicorn',label:'Vienradzis'},{id:'water',label:'Ūdens'},
     {id:'window',label:'Logs'},{id:'wolf',label:'Vilks'},{id:'work',label:'Darbs'},{id:'yoga',label:'Joga'},
+    {id:'conductor',label:'Konduktors'},
+    {id:'railway',label:'Sliedes'},
+    {id:'ticket',label:'Biļete'},
+    {id:'caduceus',label:'Hermes'},
+    {id:'neural',label:'Neirons'},
+    {id:'copilot',label:'Copilot'},
+    {id:'highfive',label:'High five'},
+    {id:'cheers',label:'Cheers'},
+    {id:'bracelet',label:'Draudzība'},
+    {id:'wallet',label:'Maks'},
+    {id:'creditcard',label:'Karte'},
+    {id:'piggy',label:'Krājkasīte'},
+    {id:'baby',label:'Bērns'},
+    {id:'rings',label:'Gredzeni'},
+    {id:'househeart',label:'Mājas sirds'},
+    {id:'racecar',label:'Sacīkšu auto'},
+    {id:'steering',label:'Stūre'},
+    {id:'helmet',label:'Ķivere'},
+    {id:'temple',label:'Templis'},
+    {id:'incense',label:'Vīraks'},
+    {id:'om',label:'Om'},
+    {id:'grapes',label:'Vīnogas'},
+    {id:'cottage',label:'Mājiņa'},
+    {id:'river',label:'Upe'},
+    {id:'laptop',label:'Portatīvais'},
+    {id:'server',label:'Serveris'},
+    {id:'wifi',label:'Wi‑Fi'},
+    {id:'journal',label:'Dienasgrāmata'},
+    {id:'pen',label:'Pildspalva'},
+    {id:'sticky',label:'Līmlapiņa'},
+    {id:'cart',label:'Ratiņi'},
+    {id:'basket',label:'Grozs'},
+    {id:'receipt',label:'Čeks'},
+    {id:'checklist',label:'Saraksts'},
+    {id:'kanban',label:'Kanban'},
+    {id:'target',label:'Mērķis'}
   ];
   var CLASSIC_EMOJIS = [
     '📝','📄','📋','📌','📎','📁','📂','🗂️',
