@@ -1893,26 +1893,14 @@ body::before {
         padding: 10px;
     }
 
-    /* Compact page chrome while a tab is open — more room, same open position for all tabs */
-    body.tab-open .header {
-        padding: 12px 0 8px;
-    }
-    body.tab-open .header .subtitle,
-    body.tab-open .header .search-bar,
-    body.tab-open .tab-actions {
-        display: none;
-    }
-    body.tab-open .header .title-group {
-        transform: scale(0.9);
-        transform-origin: center top;
-        margin-bottom: 0;
-    }
+    /* While tab open: keep page chrome (helps push panel toward mid-screen).
+       JS also adds dynamic margin-top so Atpakaļ lands ~42vh. */
     body.tab-open .expanded-panel {
-        margin-top: 8px;
         padding: 14px 14px 28px;
+        transition: margin-top 0.15s ease;
     }
 
-    /* Sticky back + actions — always under the thumb while scrolling long tabs */
+    /* Sticky back + actions after user scrolls into content */
     .expanded-header {
         position: sticky;
         top: 0;
@@ -1922,7 +1910,6 @@ body::before {
         padding: 10px 0 12px;
         background: rgba(14, 14, 28, 0.92);
         border-bottom: 1px solid var(--border);
-        /* keep bar solid enough over content */
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     }
     .expanded-title {
@@ -1941,7 +1928,6 @@ body::before {
     }
     .back-btn {
         order: 0;
-        /* slightly larger hit target for thumb */
         padding: 10px 16px;
         min-height: 42px;
     }

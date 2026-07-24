@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.11';
+  var APP_VERSION = '1.6.12';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -872,25 +872,54 @@
     var expandedContent = document.getElementById('expandedContent');
     if (expandedContent) expandedContent.style.display = '';
 
-    // QoL: every tab opens from the same place (like top-of-grid cards).
-    // Without this, opening a lower card keeps window scrollY → Atpakaļ ends up
-    // off-screen / hard to reach one-handed on phone.
+    // QoL (mobile): open every tab the same way with Atpakaļ ~ mid-screen
+    // (comfortable thumb zone). Lower grid cards used to keep scrollY so Back
+    // was off-screen; scroll-to-top alone put Back too high under the notch.
     document.body.classList.add('tab-open');
+    app._positionOpenTabForThumb();
+  };
+
+  /** Put expanded-header / Atpakaļ around ~42% viewport height on phones. */
+  app._positionOpenTabForThumb = function() {
+    var panel = document.getElementById('expandedPanel');
+    if (!panel) return;
+
+    // Clear previous offset
+    panel.style.marginTop = '';
+
+    var isMobile = window.innerWidth <= 600;
     try {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    } catch (e) {
       window.scrollTo(0, 0);
-    }
-    // Double-rAF: after layout/paint (grid hidden, panel visible)
+    } catch (e) {}
+
+    if (!isMobile) return;
+
+    var place = function() {
+      try { window.scrollTo(0, 0); } catch (e0) {}
+      var back = document.getElementById('backBtn');
+      var anchor = back || panel.querySelector('.expanded-header') || panel;
+      if (!anchor) return;
+
+      // Target: back control roughly at mid-screen (slightly above true center)
+      var desiredTop = Math.round(window.innerHeight * 0.42);
+      var rect = anchor.getBoundingClientRect();
+      var deficit = desiredTop - rect.top;
+      // Only push panel DOWN (never negative margin that overlaps header awkwardly)
+      if (deficit > 4) {
+        panel.style.marginTop = Math.round(deficit) + 'px';
+      } else {
+        panel.style.marginTop = '';
+      }
+      try { window.scrollTo(0, 0); } catch (e1) {}
+    };
+
+    // After layout: grid hidden, panel visible, fonts/icons settled
     requestAnimationFrame(function() {
-      requestAnimationFrame(function() {
-        try {
-          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-        } catch (e2) {
-          window.scrollTo(0, 0);
-        }
-      });
+      requestAnimationFrame(place);
     });
+    // One more pass shortly after images/pack icons may shift layout
+    setTimeout(place, 50);
+    setTimeout(place, 200);
   };
 
   app.closeTab = function() {
@@ -898,18 +927,18 @@
     if (grid) grid.classList.remove('hidden');
 
     var panel = document.getElementById('expandedPanel');
-    if (panel) panel.classList.remove('visible');
+    if (panel) {
+      panel.classList.remove('visible');
+      panel.style.marginTop = '';
+    }
 
     document.body.classList.remove('tab-open');
     currentTabId = null;
     app.renderAll();
 
-    // Back to grid top — consistent return
     try {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    } catch (e) {
       window.scrollTo(0, 0);
-    }
+    } catch (e) {}
   };
 
   /* ─── Summary Rendering ───────────────────────────────────────── */
