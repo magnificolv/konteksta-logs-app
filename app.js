@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.9';
+  var APP_VERSION = '1.6.10';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -147,7 +147,7 @@
   /** Small UI pack icon <img> for chrome buttons */
   function uiIconHtml(id, cls) {
     var c = cls ? ('ui-icon ' + cls) : 'ui-icon';
-    return '<img class="' + c + '" src="icons/pack/' + id + '.png" alt="" draggable="false">';
+    return '<img class="' + c + '" src="icons/pack/' + id + '.png" width="20" height="20" alt="" draggable="false">';
   }
 
   /** Section heading: map legacy emoji headings → modern pack icons */

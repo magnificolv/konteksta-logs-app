@@ -237,6 +237,8 @@ body::before {
 .tab-actions {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 12px;
     margin-bottom: 28px;
 }
@@ -256,6 +258,15 @@ body::before {
     transition: all var(--transition);
     position: relative;
     overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    line-height: 1.2;
+    min-height: 44px;
+    max-height: 48px;
+    flex: 0 0 auto;
+    box-sizing: border-box;
 }
 
 .add-tab-btn::after {
@@ -265,6 +276,7 @@ body::before {
     background: linear-gradient(135deg, transparent 30%, rgba(129,140,248,0.08) 100%);
     opacity: 0;
     transition: opacity var(--transition);
+    pointer-events: none;
 }
 
 .add-tab-btn:hover {
@@ -279,8 +291,30 @@ body::before {
 }
 
 .settings-btn {
-    padding: 11px 16px;
+    padding: 11px 14px;
     font-size: 1.1rem;
+    min-width: 48px;
+    width: 48px;
+}
+
+/* Never let pack PNGs blow up toolbar buttons (esp. mobile) */
+.add-tab-btn img,
+.settings-btn img,
+.edit-tab-btn img,
+.delete-tab-btn img,
+.back-btn img,
+.file-edit-btn img,
+.file-delete-btn img,
+.save-note-btn img,
+.add-file-btn img,
+.quick-note-btn img {
+    width: 20px !important;
+    height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    object-fit: contain !important;
+    flex-shrink: 0;
+    display: block;
 }
 
 /* ---------------------------------------------------------------------------
@@ -623,6 +657,10 @@ body::before {
     font-family: var(--font);
     font-weight: 500;
     transition: all var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
 }
 
 .back-btn:hover {
@@ -634,20 +672,37 @@ body::before {
 .expanded-title {
     font-size: 1.35rem;
     font-weight: 700;
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
     letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.expanded-title .pack-icon {
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    object-fit: contain !important;
+    flex-shrink: 0;
+    border-radius: 8px;
 }
 
 .expanded-updated {
     font-size: 0.78rem;
     color: var(--text-muted);
     font-weight: 400;
+    flex: 0 0 auto;
 }
 
 /* Expanded Actions (edit/delete) */
 .expanded-actions {
     display: flex;
+    align-items: center;
     gap: 6px;
+    flex: 0 0 auto;
 }
 
 .edit-tab-btn,
@@ -1767,25 +1822,32 @@ body::before {
 
 /* ─── UI pack icons (v1.6.9) ─────────────────────────────────────── */
 .ui-icon {
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
+    width: 18px !important;
+    height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    object-fit: contain !important;
     display: inline-block;
     vertical-align: middle;
     pointer-events: none;
     background: transparent;
+    flex-shrink: 0;
 }
 .ui-icon-lg {
-    width: 22px;
-    height: 22px;
+    width: 22px !important;
+    height: 22px !important;
+    max-width: 22px !important;
+    max-height: 22px !important;
 }
 .edit-tab-btn .ui-icon,
 .delete-tab-btn .ui-icon,
 .settings-btn .ui-icon,
 .file-edit-btn .ui-icon,
 .file-delete-btn .ui-icon {
-    width: 20px;
-    height: 20px;
+    width: 20px !important;
+    height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
 }
 .section-h-with-icon {
     display: inline-flex;
@@ -1795,8 +1857,10 @@ body::before {
 .section-h-with-icon .pack-icon {
     width: 28px !important;
     height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
     border-radius: 8px;
-    object-fit: contain;
+    object-fit: contain !important;
 }
 .summary-section-h,
 .files-section-h {
@@ -1810,4 +1874,42 @@ body::before {
 /* Never show redundant markdown H1 inside summary body */
 .expanded-content > h1 {
     display: none !important;
+}
+
+@media (max-width: 600px) {
+    .tab-actions {
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    .add-tab-btn {
+        padding: 10px 16px;
+        font-size: 0.82rem;
+        min-height: 42px;
+        max-height: 44px;
+    }
+    .settings-btn {
+        width: 44px;
+        min-width: 44px;
+        padding: 10px;
+    }
+    .expanded-header {
+        gap: 10px;
+    }
+    .expanded-title {
+        font-size: 1.15rem;
+        width: 100%;
+        flex: 1 1 100%;
+        order: 2;
+    }
+    .expanded-updated {
+        order: 3;
+        width: 100%;
+    }
+    .expanded-actions {
+        margin-left: auto;
+        order: 1;
+    }
+    .back-btn {
+        order: 0;
+    }
 }
