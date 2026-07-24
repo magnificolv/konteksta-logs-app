@@ -2728,7 +2728,7 @@
 
             itemEl.setAttribute('data-file', filename);
             // Update button to show green checkmark
-            contextBtn.innerHTML = '📄 Paplašināts konteksts <span class="file-check" title="Pievienots paplašināts konteksts: ' + escAttr(filename) + '">✅</span>';
+            contextBtn.innerHTML = uiIconHtml('uifile') + ' Paplašināts konteksts <span class="file-check" title="Pievienots paplašināts konteksts: ' + escAttr(filename) + '">✅</span>';
             currentFile = filename;
           }
 
