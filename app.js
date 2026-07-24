@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.5';
+  var APP_VERSION = '1.6.6';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';

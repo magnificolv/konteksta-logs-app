@@ -1,6 +1,6 @@
 {
-  "version": 4,
-  "name": "Konteksta Logs Emoji Pack",
+  "version": 5,
+  "name": "Konteksta Logs Emoji Pack (transparent)",
   "count": 108,
   "icons": [
     {
@@ -543,5 +543,7 @@
       "label": "Joga",
       "file": "icons/pack/yoga.png"
     }
-  ]
+  ],
+  "background": "transparent",
+  "notes": "v5: opaque plate removed via rembg; original archived at workspace/assets/icons/konteksta-emoji-pack-v1-opaque-108"
 }
