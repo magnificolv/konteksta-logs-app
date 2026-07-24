@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.10';
+  var APP_VERSION = '1.6.11';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -871,6 +871,26 @@
     if (editMode) editMode.style.display = 'none';
     var expandedContent = document.getElementById('expandedContent');
     if (expandedContent) expandedContent.style.display = '';
+
+    // QoL: every tab opens from the same place (like top-of-grid cards).
+    // Without this, opening a lower card keeps window scrollY → Atpakaļ ends up
+    // off-screen / hard to reach one-handed on phone.
+    document.body.classList.add('tab-open');
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    } catch (e) {
+      window.scrollTo(0, 0);
+    }
+    // Double-rAF: after layout/paint (grid hidden, panel visible)
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        try {
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        } catch (e2) {
+          window.scrollTo(0, 0);
+        }
+      });
+    });
   };
 
   app.closeTab = function() {
@@ -880,8 +900,16 @@
     var panel = document.getElementById('expandedPanel');
     if (panel) panel.classList.remove('visible');
 
+    document.body.classList.remove('tab-open');
     currentTabId = null;
     app.renderAll();
+
+    // Back to grid top — consistent return
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    } catch (e) {
+      window.scrollTo(0, 0);
+    }
   };
 
   /* ─── Summary Rendering ───────────────────────────────────────── */
