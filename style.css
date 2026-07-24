@@ -1763,3 +1763,51 @@ body::before {
     z-index: 10000; box-shadow: var(--shadow-lg); animation: toastIn 0.3s ease;
 }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+
+/* ─── UI pack icons (v1.6.9) ─────────────────────────────────────── */
+.ui-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+    pointer-events: none;
+    background: transparent;
+}
+.ui-icon-lg {
+    width: 22px;
+    height: 22px;
+}
+.edit-tab-btn .ui-icon,
+.delete-tab-btn .ui-icon,
+.settings-btn .ui-icon,
+.file-edit-btn .ui-icon,
+.file-delete-btn .ui-icon {
+    width: 20px;
+    height: 20px;
+}
+.section-h-with-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+.section-h-with-icon .pack-icon {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px;
+    object-fit: contain;
+}
+.summary-section-h,
+.files-section-h {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+}
+.files-section-h {
+    margin: 0 0 12px 0;
+}
+/* Never show redundant markdown H1 inside summary body */
+.expanded-content > h1 {
+    display: none !important;
+}

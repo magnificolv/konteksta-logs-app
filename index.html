@@ -59,7 +59,7 @@
         <div class="tab-actions">
             <button class="add-tab-btn" id="addTabBtn">➕ Jauns tabs</button>
             <button class="add-tab-btn" id="pushBtn" title="Push — saglabāt datus privātajā GitHub repo">☁️ Push</button>
-            <button class="add-tab-btn settings-btn" id="settingsBtn" title="Iestatījumi">⚙️</button>
+            <button class="add-tab-btn settings-btn" id="settingsBtn" title="Iestatījumi"><img class="ui-icon" src="icons/pack/uigear.png" alt=""></button>
         </div>
 
         <!-- Tab Grid -->
@@ -74,9 +74,9 @@
                 <h2 class="expanded-title" id="expandedTitle"></h2>
                 <span class="expanded-updated" id="expandedUpdated"></span>
                 <div class="expanded-actions">
-                    <button class="edit-tab-btn" id="editContentBtn" title="Rediģēt saturu">✏️</button>
-                    <button class="edit-tab-btn" id="editTabBtn" title="Rediģēt tabu">⚙️</button>
-                    <button class="delete-tab-btn" id="deleteTabBtn" title="Dzēst tabu">🗑️</button>
+                    <button class="edit-tab-btn" id="editContentBtn" title="Rediģēt saturu"><img class="ui-icon" src="icons/pack/uiedit.png" alt=""></button>
+                    <button class="edit-tab-btn" id="editTabBtn" title="Rediģēt tabu"><img class="ui-icon" src="icons/pack/uigear.png" alt=""></button>
+                    <button class="delete-tab-btn" id="deleteTabBtn" title="Dzēst tabu"><img class="ui-icon" src="icons/pack/uitrash.png" alt=""></button>
                 </div>
             </div>
             <div class="expanded-content" id="expandedContent">
@@ -84,37 +84,37 @@
             </div>
             <div class="edit-mode" id="editMode" style="display:none">
                 <div class="edit-mode-toolbar">
-                    <span class="toolbar-title">✏️ Rediģēt saturu</span>
+                    <span class="toolbar-title"><img class="ui-icon" src="icons/pack/uiedit.png" alt=""> Rediģēt saturu</span>
                     <div class="toolbar-actions">
                         <button class="cancel-note-btn" id="editCancelTopBtn">Atcelt</button>
-                        <button class="save-note-btn" id="editSaveTopBtn">💾 Saglabāt</button>
+                        <button class="save-note-btn" id="editSaveTopBtn"><img class="ui-icon" src="icons/pack/uisave.png" alt=""> Saglabāt</button>
                     </div>
                 </div>
                 <div class="structured-editor" id="structuredEditor">
                     <!-- Dinamiski aizpildās no summary-structured -->
                 </div>
                 <div class="edit-mode-actions">
-                    <button class="save-note-btn" id="editSaveBtn">💾 Saglabāt</button>
+                    <button class="save-note-btn" id="editSaveBtn"><img class="ui-icon" src="icons/pack/uisave.png" alt=""> Saglabāt</button>
                     <button class="cancel-note-btn" id="editCancelBtn">Atcelt</button>
                 </div>
             </div>
             <div class="full-files-section" id="fullFilesSection" style="display:none">
-                <h3>📂 Pilnais konteksts</h3>
+                <h3 class="files-section-h"><img class="ui-icon ui-icon-lg" src="icons/pack/uifolder.png" alt=""> Pilnais konteksts</h3>
                 <ul class="file-list" id="fileList"></ul>
-                <button class="add-file-btn" id="addFileBtn">➕ Jauns fails</button>
+                <button class="add-file-btn" id="addFileBtn"><img class="ui-icon" src="icons/pack/uiadd.png" alt=""> Jauns fails</button>
                 <div class="file-edit-mode" id="fileEditMode" style="display:none">
                     <label>Virsraksts</label>
                     <input type="text" id="fileEditTitle" placeholder="Faila virsraksts">
                     <label>Saturs (markdown)</label>
                     <textarea id="fileEditContent" placeholder="Raksti saturu..."></textarea>
                     <div class="edit-mode-actions">
-                        <button class="save-note-btn" id="fileEditSaveBtn">💾 Saglabāt</button>
+                        <button class="save-note-btn" id="fileEditSaveBtn"><img class="ui-icon" src="icons/pack/uisave.png" alt=""> Saglabāt</button>
                         <button class="cancel-note-btn" id="fileEditCancelBtn">Atcelt</button>
                     </div>
                 </div>
             </div>
             <div class="quick-note-section">
-                <button class="quick-note-btn" id="quickNoteBtn">⚡ Ātrā doma</button>
+                <button class="quick-note-btn" id="quickNoteBtn"><img class="ui-icon" src="icons/pack/uiidea.png" alt=""> Ātrā doma</button>
                 <div class="quick-note-form" id="quickNoteForm" style="display:none">
                     <textarea id="quickNoteInput" placeholder="Kas tev ienāca prātā?"></textarea>
                     <div class="quick-note-actions">
@@ -142,7 +142,7 @@
                         <input type="text" id="editIcon" placeholder="📝 vai pack:work" maxlength="40" style="flex:1" autocomplete="off">
                     </div>
                     <div class="icon-picker-tabs" role="tablist">
-                        <button type="button" class="icon-picker-tab active" data-tab="modern">✨ Modernās (152)</button>
+                        <button type="button" class="icon-picker-tab active" data-tab="modern">✨ Modernās (162)</button>
                         <button type="button" class="icon-picker-tab" data-tab="emoji">😀 Klasiskās emoji</button>
                     </div>
                     <div class="emoji-picker" id="emojiPicker"></div>

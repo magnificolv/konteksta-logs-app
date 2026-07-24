@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.8';
+  var APP_VERSION = '1.6.9';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -91,7 +91,17 @@
     {id:'agentcube',label:'AI companion'},
     {id:'friendshug',label:'Draugu apskāviens'},
     {id:'friendslaugh',label:'Smiekli'},
-    {id:'friendscoffee',label:'Kafija ar draugiem'}
+    {id:'friendscoffee',label:'Kafija ar draugiem'},
+    {id:'uifocus',label:'Fokuss'},
+    {id:'uisoon',label:'Drīz'},
+    {id:'uiidea',label:'Ideja'},
+    {id:'uifolder',label:'Mape'},
+    {id:'uifile',label:'Fails'},
+    {id:'uiedit',label:'Rediģēt'},
+    {id:'uitrash',label:'Dzēst'},
+    {id:'uigear',label:'Iestatījumi'},
+    {id:'uisave',label:'Saglabāt'},
+    {id:'uiadd',label:'Pievienot'}
   ];
   var CLASSIC_EMOJIS = [
     '📝','📄','📋','📌','📎','📁','📂','🗂️',
@@ -133,6 +143,43 @@
   }
 
   /** Plain fallback for markdown headings (no pack: ids in text). */
+
+  /** Small UI pack icon <img> for chrome buttons */
+  function uiIconHtml(id, cls) {
+    var c = cls ? ('ui-icon ' + cls) : 'ui-icon';
+    return '<img class="' + c + '" src="icons/pack/' + id + '.png" alt="" draggable="false">';
+  }
+
+  /** Section heading: map legacy emoji headings → modern pack icons */
+  function renderSectionHeadingHtml(raw) {
+    var h = String(raw || '').trim();
+    var icon = null;
+    var label = h;
+
+    if (/šobrīd\s*svarīg/i.test(h) || /^🎯/.test(h)) {
+      icon = 'uifocus';
+      label = 'Šobrīd svarīgi';
+    } else if (/tuvākaj/i.test(h) || /^⏰/.test(h) || /^⌚/.test(h)) {
+      icon = 'uisoon';
+      label = 'Tuvākajā laikā';
+    } else if (/piezīmes|idejas/i.test(h) || /^💡/.test(h)) {
+      icon = 'uiidea';
+      label = 'Piezīmes / Idejas';
+    } else {
+      // Drop a leading emoji token (non-word) if present
+      var m = h.match(/^(\S+)\s+(.+)$/);
+      if (m && !/[A-Za-zĀČĒĢĪĶĻŅŠŪŽāčēģīķļņšūž0-9]/.test(m[1])) {
+        label = m[2];
+      }
+    }
+
+    if (icon) {
+      return '<span class="section-h-with-icon">' + renderIconHtml('pack:' + icon) +
+        '<span class="section-h-text">' + escHtml(label) + '</span></span>';
+    }
+    return escHtml(label);
+  }
+
   function iconForMarkdown(icon) {
     if (isPackIcon(icon)) return '✨';
     return icon || '📄';
@@ -778,10 +825,10 @@
           tab.files.forEach(function(file) {
             var li = document.createElement('li');
             li.className = 'file-item';
-            li.innerHTML = '<span class="file-item-name">📄 ' + escHtml(file.name) + '</span>' +
+            li.innerHTML = '<span class="file-item-name">' + uiIconHtml('uifile') + ' ' + escHtml(file.name) + '</span>' +
               '<span class="file-item-actions">' +
-                '<button class="file-edit-btn" title="Rediģēt">✏️</button>' +
-                '<button class="file-delete-btn" title="Dzēst">🗑️</button>' +
+                '<button class="file-edit-btn" title="Rediģēt">' + uiIconHtml('uiedit') + '</button>' +
+                '<button class="file-delete-btn" title="Dzēst">' + uiIconHtml('uitrash') + '</button>' +
               '</span>';
             // Click on name → view file
             li.querySelector('.file-item-name').onclick = function() { app.viewFile(tab.id, file.name); };
@@ -842,6 +889,8 @@
   app.renderSummaryHtml = function(tab) {
     if (!tab || !tab.summary) return '';
     var text = tab.summary;
+    // Panel header already shows tab name — skip redundant markdown H1 ("# Name — Aktuālais")
+    text = text.replace(/^#\s+.+(?:\n+|$)/m, '');
     var tabId = tab.id;
     var parts = text.split(/(?=^## )/m);
     var html = '';
@@ -851,10 +900,15 @@
       part = part.trim();
       if (!part) return;
 
+      // Skip leftover bare H1 lines if any
+      if (/^#\s+/.test(part) && !/^##\s+/.test(part)) {
+        part = part.replace(/^#\s+.+$/m, '').trim();
+        if (!part) return;
+      }
+
       var headingMatch = part.match(/^## (.+)$/m);
       if (headingMatch) {
-        var heading = escHtml(headingMatch[1]);
-        html += '<h3>' + heading + '</h3>';
+        html += '<h3 class="summary-section-h">' + renderSectionHeadingHtml(headingMatch[1]) + '</h3>';
 
         // Content after heading
         var rest = part.replace(/^## .+$/m, '').trim();
@@ -1248,9 +1302,9 @@
       '<div class="section-item-header">' +
         '<input type="checkbox" class="section-item-checkbox" ' + checkedAttr + '>' +
         '<input type="text" class="section-item-title" value="' + escAttr(item.text) + '" placeholder="Ieraksta virsraksts">' +
-        '<button class="section-item-delete" title="Dzēst ierakstu">🗑️</button>' +
+        '<button class="section-item-delete" title="Dzēst ierakstu">' + uiIconHtml('uitrash') + '</button>' +
       '</div>' +
-      '<button class="add-context-btn">📄 Paplašināts konteksts' + (file ? ' <span class="file-check" title="Pievienots paplašināts konteksts: ' + escAttr(file) + '">✅</span>' : '') + '</button>' +
+      '<button class="add-context-btn">' + uiIconHtml('uifile') + ' Paplašināts konteksts' + (file ? ' <span class="file-check" title="Pievienots paplašināts konteksts: ' + escAttr(file) + '">✅</span>' : '') + '</button>' +
     '</div>';
   }
 
@@ -1310,7 +1364,7 @@
     var html = '';
     sections.sections.forEach(function(section, si) {
       html += '<div class="section-block" data-section-index="' + si + '">';
-      html += '<h3>' + escHtml(section.heading) + '</h3>';
+      html += '<h3 class="summary-section-h">' + renderSectionHeadingHtml(section.heading) + '</h3>';
       html += '<div class="section-items">';
       section.items.forEach(function(item, ii) {
         html += renderSectionItemHTML(item, si, ii);
@@ -1334,10 +1388,9 @@
       icon: data.icon || '📄',
       image: data.image || '',
       description: data.description || '',
-      summary: data.summary || '# ' + (data.name || 'Jauns tabs') + ' — Aktuālais\\n\\n' +
-        '## 🎯 Šobrīd svarīgi\\n\\n' +
-        '## ⏰ Tuvākajā laikā\\n\\n' +
-        '## 💡 Piezīmes / Idejas\\n\\n',
+      summary: data.summary || '## 🎯 Šobrīd svarīgi\n\n' +
+        '## ⏰ Tuvākajā laikā\n\n' +
+        '## 💡 Piezīmes / Idejas\n\n',
       files: data.files || [],
       updated: new Date().toISOString()
     };

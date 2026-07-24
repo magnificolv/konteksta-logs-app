@@ -1,7 +1,7 @@
 {
-  "version": 7,
+  "version": 8,
   "name": "Konteksta Logs Emoji Pack (transparent)",
-  "count": 152,
+  "count": 162,
   "icons": [
     {
       "id": "agentbadge",
@@ -751,6 +751,56 @@
       "id": "ufo",
       "label": "NLO",
       "file": "icons/pack/ufo.png"
+    },
+    {
+      "id": "uiadd",
+      "label": "Pievienot",
+      "file": "icons/pack/uiadd.png"
+    },
+    {
+      "id": "uiedit",
+      "label": "Rediģēt",
+      "file": "icons/pack/uiedit.png"
+    },
+    {
+      "id": "uifile",
+      "label": "Fails",
+      "file": "icons/pack/uifile.png"
+    },
+    {
+      "id": "uifocus",
+      "label": "Fokuss",
+      "file": "icons/pack/uifocus.png"
+    },
+    {
+      "id": "uifolder",
+      "label": "Mape",
+      "file": "icons/pack/uifolder.png"
+    },
+    {
+      "id": "uigear",
+      "label": "Iestatījumi",
+      "file": "icons/pack/uigear.png"
+    },
+    {
+      "id": "uiidea",
+      "label": "Ideja",
+      "file": "icons/pack/uiidea.png"
+    },
+    {
+      "id": "uisave",
+      "label": "Saglabāt",
+      "file": "icons/pack/uisave.png"
+    },
+    {
+      "id": "uisoon",
+      "label": "Drīz",
+      "file": "icons/pack/uisoon.png"
+    },
+    {
+      "id": "uitrash",
+      "label": "Dzēst",
+      "file": "icons/pack/uitrash.png"
     },
     {
       "id": "umbrella",
