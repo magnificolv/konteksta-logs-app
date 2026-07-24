@@ -1,8 +1,23 @@
 {
-  "version": 6,
+  "version": 7,
   "name": "Konteksta Logs Emoji Pack (transparent)",
-  "count": 144,
+  "count": 152,
   "icons": [
+    {
+      "id": "agentbadge",
+      "label": "Agent badge",
+      "file": "icons/pack/agentbadge.png"
+    },
+    {
+      "id": "agentbot",
+      "label": "AI aģents",
+      "file": "icons/pack/agentbot.png"
+    },
+    {
+      "id": "agentcube",
+      "label": "AI companion",
+      "file": "icons/pack/agentcube.png"
+    },
     {
       "id": "ai",
       "label": "AI",
@@ -265,6 +280,21 @@
       "file": "icons/pack/fox.png"
     },
     {
+      "id": "friendscoffee",
+      "label": "Kafija ar draugiem",
+      "file": "icons/pack/friendscoffee.png"
+    },
+    {
+      "id": "friendshug",
+      "label": "Draugu apskāviens",
+      "file": "icons/pack/friendshug.png"
+    },
+    {
+      "id": "friendslaugh",
+      "label": "Smiekli",
+      "file": "icons/pack/friendslaugh.png"
+    },
+    {
       "id": "game",
       "label": "Spēles",
       "file": "icons/pack/game.png"
@@ -406,6 +436,16 @@
       "id": "map",
       "label": "Karte",
       "file": "icons/pack/map.png"
+    },
+    {
+      "id": "meditate",
+      "label": "Meditācija",
+      "file": "icons/pack/meditate.png"
+    },
+    {
+      "id": "meditate2",
+      "label": "Meditācija 2",
+      "file": "icons/pack/meditate2.png"
     },
     {
       "id": "mic",

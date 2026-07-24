@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.7';
+  var APP_VERSION = '1.6.8';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -83,7 +83,15 @@
     {id:'receipt',label:'Čeks'},
     {id:'checklist',label:'Saraksts'},
     {id:'kanban',label:'Kanban'},
-    {id:'target',label:'Mērķis'}
+    {id:'target',label:'Mērķis'},
+    {id:'meditate',label:'Meditācija'},
+    {id:'meditate2',label:'Meditācija 2'},
+    {id:'agentbot',label:'AI aģents'},
+    {id:'agentbadge',label:'Agent badge'},
+    {id:'agentcube',label:'AI companion'},
+    {id:'friendshug',label:'Draugu apskāviens'},
+    {id:'friendslaugh',label:'Smiekli'},
+    {id:'friendscoffee',label:'Kafija ar draugiem'}
   ];
   var CLASSIC_EMOJIS = [
     '📝','📄','📋','📌','📎','📁','📂','🗂️',
