@@ -149,10 +149,15 @@
 
                     <label>Krāsa</label>
                     <input type="color" id="editColor" value="#6366f1">
+                    <p style="font-size:11px;color:var(--text-secondary);margin-top:4px;margin-bottom:0;">Kārts fona nokrāsa — galvenais vizuālais stils.</p>
 
-                    <label>Fona bilde</label>
-                    <input type="text" id="editBgImage" placeholder="https://... vai izvēlies failu ➔">
-                    <button type="button" class="save-note-btn" id="editBgUploadBtn" style="font-size:12px;padding:6px 14px;margin-top:6px;">🖼️ Izvēlēties failu</button>
+                    <label style="margin-top:14px;">Pielāgots fons <span style="font-weight:400;opacity:.7;">(pēc izvēles)</span></label>
+                    <input type="text" id="editBgImage" placeholder="https://... vai ielādē Grok Imagine bildi ➔">
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;align-items:center;">
+                        <button type="button" class="save-note-btn" id="editBgUploadBtn" style="font-size:12px;padding:6px 14px;">🖼️ Izvēlēties failu</button>
+                        <button type="button" class="cancel-note-btn" id="editBgClearBtn" style="font-size:12px;padding:6px 14px;">🗑 Noņemt fonu</button>
+                    </div>
+                    <p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">Piem. bilde no Grok Imagine. Bez fona kārts izmanto tikai krāsu.</p>
                     <img id="editBgPreview" class="image-preview" style="display:none;max-width:200px;max-height:100px;border-radius:8px;object-fit:cover;margin-top:6px;" alt="Priekšskats">
 
                     <label>Apraksts</label>

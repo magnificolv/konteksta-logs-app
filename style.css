@@ -289,8 +289,8 @@ body::before {
 
 .tab-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
     flex: 1;
 }
 
@@ -299,26 +299,48 @@ body::before {
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* ─── Tab cards v1.6.5 — centered icon+title, color tint, optional custom bg ─── */
 .tab-card {
-    background: var(--bg-card);
+    --tab-color: var(--accent);
+    position: relative;
+    min-height: 148px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: var(--radius);
+    border: 1px solid color-mix(in srgb, var(--tab-color) 28%, var(--glass-border));
+    background:
+        radial-gradient(ellipse 90% 80% at 50% 0%,
+            color-mix(in srgb, var(--tab-color) 26%, transparent) 0%,
+            transparent 58%),
+        linear-gradient(165deg,
+            color-mix(in srgb, var(--tab-color) 16%, var(--bg-card)) 0%,
+            color-mix(in srgb, var(--tab-color) 7%, rgba(12, 12, 28, 0.92)) 100%);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius);
-    cursor: pointer;
     transition: all var(--transition);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+}
+
+/* Optional custom background (Grok Imagine / upload) — full card, dark overlay keeps text readable */
+.tab-card.has-image {
+    background-image:
+        linear-gradient(165deg,
+            rgba(6, 6, 14, 0.78) 0%,
+            color-mix(in srgb, var(--tab-color) 22%, rgba(6, 6, 14, 0.72)) 100%),
+        var(--tab-bg-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .tab-card::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(129,140,248,0.06), transparent 40%);
+    background: radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        color-mix(in srgb, var(--tab-color) 14%, transparent), transparent 42%);
     opacity: 0;
     transition: opacity var(--transition);
     pointer-events: none;
@@ -342,12 +364,22 @@ body::before {
 .tab-card:nth-child(7).animate-in { animation-delay: 0.42s; }
 
 .tab-card:hover {
-    border-color: var(--tab-color, var(--accent));
-    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--tab-color) 70%, white);
+    transform: translateY(-5px);
     box-shadow:
-        0 12px 40px rgba(0,0,0,0.4),
-        0 0 0 1px var(--tab-color, var(--accent)),
-        0 0 40px color-mix(in srgb, var(--tab-color, var(--accent)) 15%, transparent);
+        0 14px 36px rgba(0,0,0,0.45),
+        0 0 0 1px color-mix(in srgb, var(--tab-color) 45%, transparent),
+        0 0 36px color-mix(in srgb, var(--tab-color) 22%, transparent);
+}
+
+.tab-card:not(.has-image):hover {
+    background:
+        radial-gradient(ellipse 95% 85% at 50% 0%,
+            color-mix(in srgb, var(--tab-color) 34%, transparent) 0%,
+            transparent 60%),
+        linear-gradient(165deg,
+            color-mix(in srgb, var(--tab-color) 22%, var(--bg-card-hover)) 0%,
+            color-mix(in srgb, var(--tab-color) 10%, rgba(16, 16, 36, 0.95)) 100%);
 }
 
 .tab-card:active {
@@ -355,40 +387,40 @@ body::before {
     transition: all 0.1s ease;
 }
 
-/* Kārts header — VIENMĒR tumšs, VIENMĒR salasāms */
-.tab-card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 16px;
-    background: rgba(0,0,0,0.15);
-    border-bottom: 1px solid var(--glass-border);
+/* Centered content — vienots PC + telefons */
+.tab-card-body {
     position: relative;
     z-index: 2;
-}
-
-.tab-card-header::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: var(--tab-color, var(--accent));
-    border-radius: 0 2px 2px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 28px 16px 24px;
+    text-align: center;
+    width: 100%;
 }
 
 .tab-card-icon {
-    font-size: 1.3rem;
-    width: 32px;
-    height: 32px;
+    font-size: 1.85rem;
+    width: 56px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255,255,255,0.04);
-    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     flex-shrink: 0;
     overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tab-card:hover .tab-card-icon {
+    transform: scale(1.08);
+    background: color-mix(in srgb, var(--tab-color) 18%, rgba(0, 0, 0, 0.35));
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--tab-color) 25%, transparent);
 }
 
 .tab-card-icon .pack-icon,
@@ -398,7 +430,7 @@ body::before {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 14px;
     display: block;
 }
 
@@ -415,63 +447,20 @@ body::before {
 }
 
 .tab-card-title {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    color: var(--text-primary);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+    max-width: 100%;
+    word-break: break-word;
 }
 
-/* Kārts bilde — tikai ja ir background_image */
+/* Legacy selectors (vecais header/image layout) — drošības tīkls */
+.tab-card-header,
 .tab-card-image {
-    height: 180px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    flex-shrink: 0;
-    flex: 1;
-}
-
-.tab-card-image::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to top,
-        var(--bg-card) 0%,
-        transparent 35%
-    );
-}
-
-.tab-card.no-image .tab-card-image {
-    display: none;
-}
-
-/* Kārtis bez bildes — smalks gradients */
-.tab-card.no-image {
-    background: linear-gradient(
-        160deg,
-        var(--bg-card) 0%,
-        color-mix(in srgb, var(--tab-color, #6366f1) 8%, var(--bg-card)) 100%
-    );
-}
-
-.tab-card.no-image:hover {
-    background: linear-gradient(
-        160deg,
-        var(--bg-card-hover) 0%,
-        color-mix(in srgb, var(--tab-color, #6366f1) 14%, var(--bg-card-hover)) 100%
-    );
-}
-
-/* Hover efekti */
-.tab-card:hover .tab-card-header {
-    background: var(--bg-card-hover);
-}
-
-.tab-card:hover .tab-card-icon {
-    background: rgba(129,140,248,0.1);
-    transform: scale(1.08);
-    transition: all 0.3s ease;
+    display: none !important;
 }
 
 /* ─── Tab Drag & Drop ─────────────────────────────────────────── */
@@ -1642,24 +1631,45 @@ body::before {
 
     .tab-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        box-shadow:
+            0 8px 24px rgba(0,0,0,0.35),
+            0 0 0 1px color-mix(in srgb, var(--tab-color) 40%, transparent);
     }
 
-    .tab-card { background: rgba(22, 22, 44, 0.85); }
+    /* NEAIZSTĀT color tint ar solid background — krāsa ir galvenais vizuālais */
     .expanded-panel { background: rgba(18, 18, 36, 0.9); }
     .modal { background: rgba(18, 18, 36, 0.95); }
     .add-tab-btn { background: rgba(22, 22, 44, 0.7); }
+
+    .tab-card {
+        min-height: 132px;
+    }
+
+    .tab-card-body {
+        padding: 22px 12px 18px;
+        gap: 10px;
+    }
+
+    .tab-card-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.6rem;
+        border-radius: 14px;
+    }
+
+    .tab-card-title {
+        font-size: 0.95rem;
+    }
 }
 
 @media (max-width: 600px) {
     .app-container { padding: 16px 14px 50px; }
     .title { font-size: 1.5rem; }
     .tab-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
     }
-    .tab-card { padding: 20px 16px 16px; }
-    .tab-icon { font-size: 2rem; }
+    .tab-card { min-height: 128px; }
     .expanded-panel { padding: 24px 18px; }
     .search-results {
         left: 0;

@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.4';
+  var APP_VERSION = '1.6.5';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -347,21 +347,27 @@
     if (!grid) return;
     var data = app.loadData();
     var html = data.tabs.map(function(tab, index) {
-      var hasImage = tab.image && tab.image.length > 0;
-      var noImgClass = hasImage ? '' : ' no-image';
+      var hasImage = !!(tab.image && String(tab.image).length > 0);
       var color = escAttr(tab.color || '#6366f1');
       var id = escAttr(tab.id);
       var name = escHtml(tab.name || 'Untitled');
-      var imgHtml = '';
+      var classes = 'tab-card' + (hasImage ? ' has-image' : '');
+      var style = '--tab-color: ' + color;
       if (hasImage) {
-        imgHtml = '<div class="tab-card-image" style="background-image:url(' + escAttr(tab.image) + ')"></div>';
+        // Single-quoted CSS url() so outer HTML style="..." stays valid
+        var safeBg = String(tab.image)
+          .replace(/\\/g, '\\\\')
+          .replace(/'/g, "\\'")
+          .replace(/\)/g, '\\)')
+          .replace(/\n/g, '')
+          .replace(/\r/g, '');
+        style += "; --tab-bg-image: url('" + safeBg + "')";
       }
-      return '<div class="tab-card' + noImgClass + '" style="--tab-color: ' + color + '" onclick="app.openTab(\'' + id + '\')" data-tab-id="' + id + '" data-tab-index="' + index + '" draggable="true">' +
-        '<div class="tab-card-header">' +
+      return '<div class="' + classes + '" style="' + style + '" onclick="app.openTab(\'' + id + '\')" data-tab-id="' + id + '" data-tab-index="' + index + '" draggable="true">' +
+        '<div class="tab-card-body">' +
           '<div class="tab-card-icon">' + renderIconHtml(tab.icon || '📄') + '</div>' +
           '<div class="tab-card-title">' + name + '</div>' +
         '</div>' +
-        imgHtml +
         '<div class="tab-drag-handle" title="Vilkt lai pārkārtotu">⠿</div>' +
       '</div>';
     }).join('');
@@ -2237,6 +2243,18 @@
           reader.readAsDataURL(file);
         };
         input.click();
+      });
+    }
+
+    // Clear optional custom background in edit modal
+    var editBgClearBtn = document.getElementById('editBgClearBtn');
+    if (editBgClearBtn) {
+      editBgClearBtn.addEventListener('click', function() {
+        _tempBgImage = '';
+        var bgInput = document.getElementById('editBgImage');
+        if (bgInput) bgInput.value = '';
+        var preview = document.getElementById('editBgPreview');
+        if (preview) { preview.src = ''; preview.style.display = 'none'; }
       });
     }
 
