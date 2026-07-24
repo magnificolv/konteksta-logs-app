@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.3';
+  var APP_VERSION = '1.6.4';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -1965,8 +1965,40 @@
     var addTabBtn = document.getElementById('addTabBtn');
     if (addTabBtn) addTabBtn.addEventListener('click', function() { app.showCreateModal(); });
 
-    // Push — IZSLĒGTS DEV versijā (source of truth = production app)
-    // Push button event listener noņemts — lieto tikai Pull + Reset no Settings
+    // Push button — telefona/PC dati → privātais GitHub repo (PRODUCTION only)
+    var pushBtn = document.getElementById('pushBtn');
+    if (pushBtn) {
+      pushBtn.addEventListener('click', function() {
+        pushBtn.textContent = '⏳ Push...';
+        pushBtn.disabled = true;
+
+        var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        if (isLocal) {
+          // PC DEV: git pull + push caur serveri (parasti nav Production)
+          fetch('/api/sync', { method: 'POST' })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              if (data.pushed) {
+                pushBtn.textContent = '✅ Push OK';
+                setTimeout(function() { pushBtn.textContent = '☁️ Push'; pushBtn.disabled = false; }, 3000);
+              } else {
+                pushBtn.textContent = '⚠️ ' + (data.message || 'Neizdevās');
+                setTimeout(function() { pushBtn.textContent = '☁️ Push'; pushBtn.disabled = false; }, 3000);
+              }
+            })
+            .catch(function() {
+              pushBtn.textContent = '❌ Kļūda';
+              setTimeout(function() { pushBtn.textContent = '☁️ Push'; pushBtn.disabled = false; }, 3000);
+            });
+        } else {
+          // Production (GitHub Pages): push caur Cloudflare Worker
+          app.pushPhoneData(function(result) {
+            pushBtn.textContent = result.icon + ' ' + result.msg;
+            setTimeout(function() { pushBtn.textContent = '☁️ Push'; pushBtn.disabled = false; }, 3000);
+          });
+        }
+      });
+    }
 
     // ─── Settings Modal ──────────────────────────────────────────
 
