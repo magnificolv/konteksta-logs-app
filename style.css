@@ -78,66 +78,63 @@ body::before {
 }
 
 /* ---------------------------------------------------------------------------
-/* Header
+/* Header — cinematic banner as background-image for true seamless blend
    ========================================================================== */
 
 .header {
     text-align: center;
-    padding: 24px 0 36px;
+    padding: 0;
     position: relative;
+    background:
+        /* Banner image */
+        url('icons/banner-a-starlight.png') center top / 100% auto no-repeat,
+        /* Bottom fade-out to bg-deep */
+        linear-gradient(to bottom,
+            var(--bg-deep) 0%,
+            transparent 15%,
+            transparent 65%,
+            var(--bg-deep) 100%),
+        /* Base */
+        var(--bg-deep);
+    background-blend-mode: normal, normal, normal;
+    min-height: 0;
 }
 
-/* Banner — replaces old icon+text with cinematic image */
+/* The gradient overlay fades the banner into the page */
+.header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to bottom,
+            transparent 40%,
+            var(--bg-deep) 82%,
+            var(--bg-deep) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Brand H title group — no content, just spacer for proportions */
 .title-group.brand-h {
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index: 1;
+    z-index: 2;
     margin-bottom: 0;
-    padding: 0 16px;
+    padding: 0;
+    /* Aspect ratio spacer: banner is 16:9, so height = width * 9/16 */
+    aspect-ratio: 16 / 9;
+    max-height: 540px;
 }
 
 .banner-img {
-    width: 100%;
-    max-width: 960px;
-    height: auto;
-    display: block;
-    /* No drop-shadow — it creates a visible hard edge line */
-    filter: none;
-    /* Mask: banner fades to transparent at bottom 40%, revealing body bg */
-    mask-image: linear-gradient(to bottom,
-        black 0%,
-        black 55%,
-        rgba(0,0,0,0.7) 70%,
-        transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom,
-        black 0%,
-        black 55%,
-        rgba(0,0,0,0.7) 70%,
-        transparent 100%);
+    display: none; /* banner is now background-image, img hidden */
 }
 
-/* Extended overlay fade — picks up where mask leaves off */
-.title-group.brand-h::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 40%;
-    min-height: 60px;
-    background: linear-gradient(to bottom,
-        transparent 0%,
-        rgba(6, 6, 12, 0.3) 30%,
-        var(--bg-deep) 100%);
-    pointer-events: none;
-    z-index: 2;
-}
-
-/* Old icon + text — no longer used, banner replaces them */
+/* Old icon + text — no longer used */
 .title-icon, .brand-mark, .title, .title-accent, .subtitle {
-    /* kept for reference, not rendered */
+    display: none;
 }
 
 @keyframes float {
@@ -147,10 +144,11 @@ body::before {
 
 @media (max-width: 600px) {
     .header {
-        padding: 12px 0 20px;
+        padding: 0;
     }
-    .banner-img {
-        max-width: 100%;
+    .title-group.brand-h {
+        aspect-ratio: 16 / 9;
+        max-height: none;
     }
 }
 
@@ -162,6 +160,8 @@ body::before {
     position: relative;
     max-width: 560px;
     margin: 0 auto;
+    padding: 28px 0 10px;
+    z-index: 2;
 }
 
 .search-input {
