@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.18';
+  var APP_VERSION = '1.6.19';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -416,9 +416,34 @@
     }, 500);
   }
 
-  app.renderAll = function() {
+  app.hideLoader = function() {
     var loader = document.getElementById('windowLoader');
-    if (loader) loader.style.display = 'none';
+    if (!loader || loader.classList.contains('hide') || loader._hiding) return;
+    loader._hiding = true;
+    // Play "zoom through the window" then fade
+    loader.classList.add('zoom-out');
+    setTimeout(function() {
+      loader.classList.add('hide');
+      loader.setAttribute('aria-hidden', 'true');
+      // remove from layout after transition
+      setTimeout(function() {
+        loader.style.display = 'none';
+      }, 750);
+    }, 420);
+  };
+
+  app.renderAll = function() {
+    // Keep splash visible briefly so zoom-in can play, then zoom-through exit
+    var minSplashMs = 1400;
+    var started = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+    function finish() {
+      var now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+      var wait = Math.max(0, minSplashMs - (now - started));
+      setTimeout(function() {
+        app.hideLoader();
+      }, wait);
+    }
+    finish();
     app.renderTabs();
     app.updateTimestamps();
   };

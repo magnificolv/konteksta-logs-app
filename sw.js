@@ -1,5 +1,5 @@
 // Service Worker for Kontekstalogas — offline-first PWA
-const CACHE_NAME = 'kontekstalogas-v1.6.18';
+const CACHE_NAME = 'kontekstalogas-v1.6.19';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -12,6 +12,7 @@ const STATIC_ASSETS = [
   './icons/apple-touch-icon.png',
   './icons/brand-mark.png',
   './icons/banner-hero.png',
+  './icons/splash-window.png',
   './icons/pack/manifest.json'
 ];
 
