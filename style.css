@@ -78,78 +78,63 @@ body::before {
 }
 
 /* ---------------------------------------------------------------------------
-/* Header — full-bleed starlight hero (no crop, no card box)
-   Asset banner-hero.png already fades into --bg-deep (#06060c)
+/* Header — full-bleed starlight hero (void edges = page bg, no card)
    ========================================================================== */
 
 .header {
     text-align: center;
     padding: 0;
     position: relative;
-    /* Break out of .app-container so hero is edge-to-edge */
     width: 100vw;
     max-width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
-    background: transparent;
+    background: var(--bg-deep);
     border: none;
     box-shadow: none;
-    overflow: visible;
+    overflow: hidden; /* clip any subpixel fringe */
 }
 
-/* Hero wrapper — natural image height, never cover-cropped */
 .header-hero {
     position: relative;
     width: 100%;
     line-height: 0;
     pointer-events: none;
-    /* Soft bottom veil into page (gentle — composition stays readable) */
-    -webkit-mask-image: linear-gradient(
-        to bottom,
-        #000 0%,
-        #000 72%,
-        rgba(0, 0, 0, 0.75) 86%,
-        transparent 100%
-    );
-    mask-image: linear-gradient(
-        to bottom,
-        #000 0%,
-        #000 72%,
-        rgba(0, 0, 0, 0.75) 86%,
-        transparent 100%
-    );
+    background: var(--bg-deep);
 }
 
+/* Full viewport width — NEVER max-width card on PC */
 .header-hero-img {
     display: block;
     width: 100%;
-    max-width: 1100px;
+    max-width: none;
     height: auto;
-    margin: 0 auto;
-    /* No drop-shadow — shadows recreate the rectangle edge */
+    margin: 0;
     filter: none;
     user-select: none;
     -webkit-user-drag: none;
+    /* image edges already match --bg-deep */
+    background: var(--bg-deep);
 }
 
-/* Ambient bridge under hero so tabs/search sit in the same night sky */
+/* Soft veil only under the glow floor → page content */
 .header-hero::after {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 38%;
+    height: 28%;
     background: linear-gradient(
         to bottom,
         transparent 0%,
-        rgba(6, 6, 12, 0.45) 55%,
+        rgba(6, 6, 12, 0.55) 60%,
         var(--bg-deep) 100%
     );
     pointer-events: none;
 }
 
-/* Legacy selectors — unused */
+/* Legacy */
 .title-group.brand-h,
 .banner-img,
 .title-icon,
@@ -166,49 +151,34 @@ body::before {
 }
 
 @media (max-width: 700px) {
-    .header-hero-img {
-        max-width: 100%;
-        /* Slight zoom-in on mobile so logo+window stay bold without cutting title */
-        width: 118%;
-        max-width: none;
-        margin-left: -9%;
-        margin-right: -9%;
-    }
+    /* Mobile: slight center crop zoom so mark+title stay bold */
     .header-hero {
-        -webkit-mask-image: linear-gradient(
-            to bottom,
-            #000 0%,
-            #000 68%,
-            rgba(0, 0, 0, 0.7) 84%,
-            transparent 100%
-        );
-        mask-image: linear-gradient(
-            to bottom,
-            #000 0%,
-            #000 68%,
-            rgba(0, 0, 0, 0.7) 84%,
-            transparent 100%
-        );
+        overflow: hidden;
+    }
+    .header-hero-img {
+        width: 145%;
+        max-width: none;
+        margin-left: -22.5%;
+        margin-right: -22.5%;
     }
 }
 
 /* ---------------------------------------------------------------------------
-   Search Bar — sits in the faded lower zone, not over the title
+   Search Bar — in the soft lower veil, clear of artwork
    --------------------------------------------------------------------------- */
 
 .search-bar {
     position: relative;
     max-width: 560px;
-    /* Pull slightly into the faded bottom of the hero, not the artwork center */
-    margin: -36px auto 0;
-    padding: 0 18px 12px;
+    margin: -48px auto 0;
+    padding: 0 18px 14px;
     z-index: 3;
 }
 
 @media (max-width: 700px) {
     .search-bar {
-        margin-top: -28px;
-        padding: 0 14px 10px;
+        margin-top: -36px;
+        padding: 0 14px 12px;
     }
 }
 

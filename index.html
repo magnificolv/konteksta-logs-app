@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="screen-orientation" content="portrait">
-    <title>🪟 Konteksta logs</title>
+    <title>Konteksta logs</title>
 
-    <!-- PWA -->
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/brand-mark.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icons/brand-mark.png">
-    <link rel="apple-touch-icon" href="icons/brand-mark.png">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#09090f">
+    <!-- PWA / icons (v=1618 cache-bust — replaces old dual tab icons) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=1618">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=1618">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png?v=1618">
+    <link rel="manifest" href="manifest.json?v=1618">
+    <meta name="theme-color" content="#06060c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Konteksta logs">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1618">
 </head>
 <body>
     <div class="app-container">
@@ -42,10 +42,10 @@
         <header class="header">
             <div class="header-hero">
                 <img class="header-hero-img"
-                     src="icons/banner-hero.png"
+                     src="icons/banner-hero.png?v=1618"
                      alt="Konteksta logs — Tavas dzīves logi vienā mirklī"
-                     width="1586"
-                     height="949"
+                     width="1842"
+                     height="870"
                      decoding="async"
                      fetchpriority="high">
             </div>
@@ -223,7 +223,7 @@
         </footer>
     </div>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=1618"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {

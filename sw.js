@@ -1,5 +1,5 @@
 // Service Worker for Kontekstalogas — offline-first PWA
-const CACHE_NAME = 'kontekstalogas-v1.6.3';
+const CACHE_NAME = 'kontekstalogas-v1.6.18';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -8,6 +8,10 @@ const STATIC_ASSETS = [
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
+  './icons/favicon-32.png',
+  './icons/apple-touch-icon.png',
+  './icons/brand-mark.png',
+  './icons/banner-hero.png',
   './icons/pack/manifest.json'
 ];
 
@@ -62,7 +66,20 @@ self.addEventListener('fetch', event => {
     return;
   }
   
-  // Static assets (images, icons, manifest): cache-first
+  // Static assets (images, icons, manifest): network-first for icons so updates land
+  if (path.includes('icon') || path.includes('favicon') || path.includes('banner-hero') || path.includes('brand-mark')) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then(cached => cached || fetch(event.request))
   );
