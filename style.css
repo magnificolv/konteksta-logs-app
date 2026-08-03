@@ -149,45 +149,6 @@ body::before {
     50% { transform: translateY(-6px); }
 }
 
-/* ── Desktop / tablet landscape: compact hero so tabs stay above the fold ── */
-@media (min-width: 701px) {
-    .header-hero {
-        /* Cap height — no more full-screen banner on PC */
-        height: clamp(200px, 28vh, 300px);
-        overflow: hidden;
-    }
-    .header-hero-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        /* Keep window + title in frame */
-        object-position: center 42%;
-    }
-    .header-hero::after {
-        height: 36%;
-    }
-    .search-bar {
-        margin-top: -28px;
-        padding: 0 18px 10px;
-    }
-}
-
-/* ── Mobile: keep the good full composition ── */
-@media (max-width: 700px) {
-    .header-hero {
-        overflow: hidden;
-        height: auto;
-    }
-    .header-hero-img {
-        width: 145%;
-        max-width: none;
-        height: auto;
-        margin-left: -22.5%;
-        margin-right: -22.5%;
-        object-fit: unset;
-    }
-}
-
 /* ---------------------------------------------------------------------------
    Search Bar — in the soft lower veil, clear of artwork
    --------------------------------------------------------------------------- */
@@ -200,7 +161,59 @@ body::before {
     z-index: 3;
 }
 
+/* ── Desktop: full composition, compact, search BELOW art (no overlap/crop) ── */
+@media (min-width: 701px) {
+    .header {
+        padding-top: 8px;
+    }
+    .header-hero {
+        height: auto;
+        overflow: visible;
+        display: flex;
+        justify-content: center;
+    }
+    .header-hero-img {
+        /* Full art visible — no object-fit:cover crop */
+        width: min(92vw, 880px);
+        max-width: 880px;
+        height: auto;
+        margin: 0 auto;
+        object-fit: unset;
+        object-position: center center;
+        background: transparent;
+    }
+    .header-hero::after {
+        height: 18%;
+        background: linear-gradient(
+            to bottom,
+            transparent 0%,
+            rgba(6, 6, 12, 0.25) 50%,
+            var(--bg-deep) 100%
+        );
+    }
+    .search-bar {
+        /* CLEAR of artwork — sits under the glow floor */
+        margin-top: 4px;
+        margin-bottom: 0;
+        padding: 0 18px 12px;
+    }
+}
+
+/* ── Mobile: keep the good full composition ── */
 @media (max-width: 700px) {
+    .header-hero {
+        overflow: hidden;
+        height: auto;
+        display: block;
+    }
+    .header-hero-img {
+        width: 145%;
+        max-width: none;
+        height: auto;
+        margin-left: -22.5%;
+        margin-right: -22.5%;
+        object-fit: unset;
+    }
     .search-bar {
         margin-top: -36px;
         padding: 0 14px 12px;
