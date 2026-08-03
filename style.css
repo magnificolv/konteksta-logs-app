@@ -103,7 +103,7 @@ body::before {
     background: var(--bg-deep);
 }
 
-/* Full viewport width — NEVER max-width card on PC */
+/* Base image (mobile keeps natural height + zoom below) */
 .header-hero-img {
     display: block;
     width: 100%;
@@ -113,7 +113,6 @@ body::before {
     filter: none;
     user-select: none;
     -webkit-user-drag: none;
-    /* image edges already match --bg-deep */
     background: var(--bg-deep);
 }
 
@@ -150,16 +149,42 @@ body::before {
     50% { transform: translateY(-6px); }
 }
 
+/* ── Desktop / tablet landscape: compact hero so tabs stay above the fold ── */
+@media (min-width: 701px) {
+    .header-hero {
+        /* Cap height — no more full-screen banner on PC */
+        height: clamp(200px, 28vh, 300px);
+        overflow: hidden;
+    }
+    .header-hero-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* Keep window + title in frame */
+        object-position: center 42%;
+    }
+    .header-hero::after {
+        height: 36%;
+    }
+    .search-bar {
+        margin-top: -28px;
+        padding: 0 18px 10px;
+    }
+}
+
+/* ── Mobile: keep the good full composition ── */
 @media (max-width: 700px) {
-    /* Mobile: slight center crop zoom so mark+title stay bold */
     .header-hero {
         overflow: hidden;
+        height: auto;
     }
     .header-hero-img {
         width: 145%;
         max-width: none;
+        height: auto;
         margin-left: -22.5%;
         margin-right: -22.5%;
+        object-fit: unset;
     }
 }
 

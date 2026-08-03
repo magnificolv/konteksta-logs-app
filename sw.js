@@ -1,5 +1,5 @@
 // Service Worker for Kontekstalogas — offline-first PWA
-const CACHE_NAME = 'kontekstalogas-v1.6.19';
+const CACHE_NAME = 'kontekstalogas-v1.6.20';
 const STATIC_ASSETS = [
   './',
   './index.html',
