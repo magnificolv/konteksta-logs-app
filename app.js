@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.13';
+  var APP_VERSION = '1.6.14';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -1272,8 +1272,24 @@
       }
     }
 
-    // Split by section headings
-    var sectionRegex = /^## (🎯|⏰|💡) (.+)$/gm;
+    // Helper: normalize ANY heading → canonical 🎯/⏰/💡 format
+    function normalizeHeading(raw) {
+      var h = (raw || '').trim();
+      // Strip leading emoji/icon token(s) for keyword matching
+      var cleaned = h.replace(/^[^\wĀ-ū\s,;:]+(\s*)/, '');
+      if (/šobrīd\s*svarīg/i.test(h) || /šobrīd\s*svarīg/i.test(cleaned) || /^🎯/.test(h)) {
+        return '🎯 Šobrīd svarīgi';
+      } else if (/tuvākaj/i.test(h) || /tuvākaj/i.test(cleaned) || /^⏰/.test(h) || /^⌚/.test(h)) {
+        return '⏰ Tuvākajā laikā';
+      } else if (/piezīmes|idejas/i.test(h) || /piezīmes|idejas/i.test(cleaned) || /^💡/.test(h)) {
+        return '💡 Piezīmes / Idejas';
+      }
+      // Unknown heading — keep as-is (user-defined section)
+      return h;
+    }
+
+    // Split by ANY ## heading (flexible — handles legacy formats)
+    var sectionRegex = /^## (.+)$/gm;
     var parts = [];
     var lastIndex = 0;
     var match;
@@ -1281,7 +1297,7 @@
       if (lastIndex < match.index) {
         parts.push({ type: 'content', text: md.slice(lastIndex, match.index) });
       }
-      parts.push({ type: 'heading', icon: match[1], text: match[2], index: match.index });
+      parts.push({ type: 'heading', text: match[1], index: match.index });
       lastIndex = match.index + match[0].length;
     }
     if (lastIndex < md.length) {
@@ -1289,6 +1305,7 @@
     }
 
     var currentSection = null;
+    var orphanItems = [];
     var itemRegex = /^- \[([ x])\] (?:\[([^\]]+)\]\(full\/([^\)]+)\)(?:\s*—\s*(.+))?|(.+))$/gm;
 
     parts.forEach(function(part) {
@@ -1297,10 +1314,10 @@
           sections.push(currentSection);
         }
         currentSection = {
-          heading: part.icon + ' ' + part.text,
+          heading: normalizeHeading(part.text),
           items: []
         };
-      } else if (part.type === 'content' && currentSection) {
+      } else if (part.type === 'content') {
         var text = part.text;
         var itemMatch;
         // Reset lastIndex on the regex
@@ -1317,12 +1334,28 @@
             // Plain text
             item.text = itemMatch[5];
           }
-          currentSection.items.push(item);
+          if (currentSection) {
+            currentSection.items.push(item);
+          } else {
+            // Orphan item (before any ## heading) — preserve it
+            orphanItems.push(item);
+          }
         }
       }
     });
     if (currentSection) {
       sections.push(currentSection);
+    }
+
+    // If orphan items exist but no sections, add them to a default section
+    if (orphanItems.length > 0 && sections.length === 0) {
+      sections.push({
+        heading: '🎯 Šobrīd svarīgi',
+        items: orphanItems
+      });
+    } else if (orphanItems.length > 0 && sections.length > 0) {
+      // Prepend orphans to the first section
+      sections[0].items = orphanItems.concat(sections[0].items);
     }
 
     return { title: title, sections: sections };
@@ -2064,6 +2097,11 @@
   }
 
   function init() {
+    // Lock screen orientation to portrait (manifest + JS double safety)
+    if (screen.orientation && screen.orientation.lock) {
+      try { screen.orientation.lock('portrait').catch(function() {}); } catch(e) {}
+    }
+
     // Ielādē datus — vispirms localStorage (ātrs), tad mēģina serveri fonā
     var raw = localStorage.getItem(STORAGE_KEY);
     var hasLocalData = !!raw;
