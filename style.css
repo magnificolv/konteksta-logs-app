@@ -69,7 +69,7 @@ body::before {
 .app-container {
     max-width: 1240px;
     margin: 0 auto;
-    padding: 24px 28px 100px;
+    padding: 0 28px 100px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -78,80 +78,86 @@ body::before {
 }
 
 /* ---------------------------------------------------------------------------
-/* Header — full-bleed cinematic hero (baked edge fade in banner-hero.png)
+/* Header — full-bleed starlight hero (no crop, no card box)
+   Asset banner-hero.png already fades into --bg-deep (#06060c)
    ========================================================================== */
 
 .header {
     text-align: center;
-    padding: 0 0 8px;
+    padding: 0;
     position: relative;
-    /* Escape app-container padding — true full viewport width */
+    /* Break out of .app-container so hero is edge-to-edge */
     width: 100vw;
     max-width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
-    /* No card chrome — just the faded hero on page void */
     background: transparent;
     border: none;
     box-shadow: none;
     overflow: visible;
 }
 
-/* Full-bleed hero layer (edges already faded to #06060c in the PNG) */
+/* Hero wrapper — natural image height, never cover-cropped */
 .header-hero {
     position: relative;
     width: 100%;
-    /* Compact hero strip — not a big floating card */
-    height: clamp(180px, 36vw, 340px);
-    background:
-        url('icons/banner-hero.png') center 28% / cover no-repeat;
+    line-height: 0;
     pointer-events: none;
-    /* Extra CSS fade insurance on bottom */
+    /* Soft bottom veil into page (gentle — composition stays readable) */
     -webkit-mask-image: linear-gradient(
         to bottom,
         #000 0%,
-        #000 58%,
-        rgba(0, 0, 0, 0.55) 78%,
+        #000 72%,
+        rgba(0, 0, 0, 0.75) 86%,
         transparent 100%
     );
     mask-image: linear-gradient(
         to bottom,
         #000 0%,
-        #000 58%,
-        rgba(0, 0, 0, 0.55) 78%,
+        #000 72%,
+        rgba(0, 0, 0, 0.75) 86%,
         transparent 100%
     );
 }
 
-/* Soft violet bridge under hero → page (matches Mans Dizains glow) */
+.header-hero-img {
+    display: block;
+    width: 100%;
+    max-width: 1100px;
+    height: auto;
+    margin: 0 auto;
+    /* No drop-shadow — shadows recreate the rectangle edge */
+    filter: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Ambient bridge under hero so tabs/search sit in the same night sky */
 .header-hero::after {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 55%;
+    height: 38%;
     background: linear-gradient(
         to bottom,
         transparent 0%,
-        rgba(6, 6, 12, 0.35) 40%,
+        rgba(6, 6, 12, 0.45) 55%,
         var(--bg-deep) 100%
     );
     pointer-events: none;
 }
 
-/* Spacer group no longer needed for layout — keep empty if present */
-.title-group.brand-h {
-    display: none;
-}
-
-.banner-img {
-    display: none;
-}
-
-/* Old icon + text — no longer used */
-.title-icon, .brand-mark, .title, .title-accent, .subtitle {
-    display: none;
+/* Legacy selectors — unused */
+.title-group.brand-h,
+.banner-img,
+.title-icon,
+.brand-mark,
+.title,
+.title-accent,
+.subtitle {
+    display: none !important;
 }
 
 @keyframes float {
@@ -159,34 +165,51 @@ body::before {
     50% { transform: translateY(-6px); }
 }
 
-@media (max-width: 600px) {
-    .header {
-        padding: 0 0 4px;
+@media (max-width: 700px) {
+    .header-hero-img {
+        max-width: 100%;
+        /* Slight zoom-in on mobile so logo+window stay bold without cutting title */
+        width: 118%;
+        max-width: none;
+        margin-left: -9%;
+        margin-right: -9%;
     }
     .header-hero {
-        height: clamp(160px, 48vw, 260px);
-        background-position: center 30%;
-    }
-}
-
-/* Landscape phone: keep hero compact, don't stretch into a wide rectangle card */
-@media (max-height: 500px) and (orientation: landscape) {
-    .header-hero {
-        height: 120px;
-        background-position: center 35%;
+        -webkit-mask-image: linear-gradient(
+            to bottom,
+            #000 0%,
+            #000 68%,
+            rgba(0, 0, 0, 0.7) 84%,
+            transparent 100%
+        );
+        mask-image: linear-gradient(
+            to bottom,
+            #000 0%,
+            #000 68%,
+            rgba(0, 0, 0, 0.7) 84%,
+            transparent 100%
+        );
     }
 }
 
 /* ---------------------------------------------------------------------------
-   Search Bar
+   Search Bar — sits in the faded lower zone, not over the title
    --------------------------------------------------------------------------- */
 
 .search-bar {
     position: relative;
     max-width: 560px;
-    margin: -18px auto 0;
-    padding: 0 16px 10px;
-    z-index: 2;
+    /* Pull slightly into the faded bottom of the hero, not the artwork center */
+    margin: -36px auto 0;
+    padding: 0 18px 12px;
+    z-index: 3;
+}
+
+@media (max-width: 700px) {
+    .search-bar {
+        margin-top: -28px;
+        padding: 0 14px 10px;
+    }
 }
 
 .search-input {
