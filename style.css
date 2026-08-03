@@ -78,58 +78,75 @@ body::before {
 }
 
 /* ---------------------------------------------------------------------------
-/* Header — cinematic banner as background-image for true seamless blend
+/* Header — full-bleed cinematic hero (baked edge fade in banner-hero.png)
    ========================================================================== */
 
 .header {
     text-align: center;
-    padding: 0;
+    padding: 0 0 8px;
     position: relative;
-    background:
-        /* Banner image */
-        url('icons/banner-a-starlight.png') center top / 100% auto no-repeat,
-        /* Bottom fade-out to bg-deep */
-        linear-gradient(to bottom,
-            var(--bg-deep) 0%,
-            transparent 15%,
-            transparent 65%,
-            var(--bg-deep) 100%),
-        /* Base */
-        var(--bg-deep);
-    background-blend-mode: normal, normal, normal;
-    min-height: 0;
+    /* Escape app-container padding — true full viewport width */
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    /* No card chrome — just the faded hero on page void */
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
 }
 
-/* The gradient overlay fades the banner into the page */
-.header::before {
+/* Full-bleed hero layer (edges already faded to #06060c in the PNG) */
+.header-hero {
+    position: relative;
+    width: 100%;
+    /* Compact hero strip — not a big floating card */
+    height: clamp(180px, 36vw, 340px);
+    background:
+        url('icons/banner-hero.png') center 28% / cover no-repeat;
+    pointer-events: none;
+    /* Extra CSS fade insurance on bottom */
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        #000 0%,
+        #000 58%,
+        rgba(0, 0, 0, 0.55) 78%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        #000 0%,
+        #000 58%,
+        rgba(0, 0, 0, 0.55) 78%,
+        transparent 100%
+    );
+}
+
+/* Soft violet bridge under hero → page (matches Mans Dizains glow) */
+.header-hero::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(to bottom,
-            transparent 40%,
-            var(--bg-deep) 82%,
-            var(--bg-deep) 100%);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 55%;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(6, 6, 12, 0.35) 40%,
+        var(--bg-deep) 100%
+    );
     pointer-events: none;
-    z-index: 1;
 }
 
-/* Brand H title group — no content, just spacer for proportions */
+/* Spacer group no longer needed for layout — keep empty if present */
 .title-group.brand-h {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
-    margin-bottom: 0;
-    padding: 0;
-    /* Aspect ratio spacer: banner is 16:9, so height = width * 9/16 */
-    aspect-ratio: 16 / 9;
-    max-height: 540px;
+    display: none;
 }
 
 .banner-img {
-    display: none; /* banner is now background-image, img hidden */
+    display: none;
 }
 
 /* Old icon + text — no longer used */
@@ -144,11 +161,19 @@ body::before {
 
 @media (max-width: 600px) {
     .header {
-        padding: 0;
+        padding: 0 0 4px;
     }
-    .title-group.brand-h {
-        aspect-ratio: 16 / 9;
-        max-height: none;
+    .header-hero {
+        height: clamp(160px, 48vw, 260px);
+        background-position: center 30%;
+    }
+}
+
+/* Landscape phone: keep hero compact, don't stretch into a wide rectangle card */
+@media (max-height: 500px) and (orientation: landscape) {
+    .header-hero {
+        height: 120px;
+        background-position: center 35%;
     }
 }
 
@@ -159,8 +184,8 @@ body::before {
 .search-bar {
     position: relative;
     max-width: 560px;
-    margin: 0 auto;
-    padding: 28px 0 10px;
+    margin: -18px auto 0;
+    padding: 0 16px 10px;
     z-index: 2;
 }
 

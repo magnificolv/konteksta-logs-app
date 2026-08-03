@@ -3,7 +3,7 @@
 
   /* ─── Constants ─────────────────────────────────────────────────── */
   var STORAGE_KEY = 'kontekstalogas-data';
-  var APP_VERSION = '1.6.15';
+  var APP_VERSION = '1.6.16';
   var BUILD_ENV = (function() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return '🧪 dev';
     if (location.hostname.includes('tail')) return '🧪 beta';
@@ -2097,10 +2097,27 @@
   }
 
   function init() {
-    // Lock screen orientation to portrait (manifest + JS double safety)
-    if (screen.orientation && screen.orientation.lock) {
-      try { screen.orientation.lock('portrait').catch(function() {}); } catch(e) {}
+    // Lock portrait — works mainly for installed PWA / fullscreen (browser tabs often ignore)
+    function lockPortrait() {
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('portrait').catch(function() {});
+          screen.orientation.lock('portrait-primary').catch(function() {});
+        }
+        if (screen.lockOrientation) screen.lockOrientation('portrait');
+        if (screen.mozLockOrientation) screen.mozLockOrientation('portrait');
+        if (screen.msLockOrientation) screen.msLockOrientation('portrait');
+      } catch (e) {}
     }
+    lockPortrait();
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) lockPortrait();
+    });
+    // Some Android WebViews only allow lock after a user gesture
+    document.addEventListener('touchstart', function once() {
+      lockPortrait();
+      document.removeEventListener('touchstart', once, true);
+    }, true);
 
     // Ielādē datus — vispirms localStorage (ātrs), tad mēģina serveri fonā
     var raw = localStorage.getItem(STORAGE_KEY);
