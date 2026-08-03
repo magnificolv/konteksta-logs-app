@@ -95,6 +95,7 @@ body::before {
     position: relative;
     z-index: 1;
     margin-bottom: 0;
+    padding: 0 16px;
 }
 
 .banner-img {
@@ -102,18 +103,34 @@ body::before {
     max-width: 960px;
     height: auto;
     display: block;
-    filter: drop-shadow(0 4px 40px rgba(139, 92, 246, 0.18));
+    /* No drop-shadow — it creates a visible hard edge line */
+    filter: none;
+    /* Mask: banner fades to transparent at bottom 40%, revealing body bg */
+    mask-image: linear-gradient(to bottom,
+        black 0%,
+        black 55%,
+        rgba(0,0,0,0.7) 70%,
+        transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom,
+        black 0%,
+        black 55%,
+        rgba(0,0,0,0.7) 70%,
+        transparent 100%);
 }
 
-/* Seamless fade from banner bottom → page background */
+/* Extended overlay fade — picks up where mask leaves off */
 .title-group.brand-h::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 48px;
-    background: linear-gradient(to bottom, transparent 0%, var(--bg-deep) 100%);
+    height: 40%;
+    min-height: 60px;
+    background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(6, 6, 12, 0.3) 30%,
+        var(--bg-deep) 100%);
     pointer-events: none;
     z-index: 2;
 }
